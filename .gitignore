@@ -1,0 +1,89 @@
+# HiTem3D ComfyUI Node - Git Ignore
+# Created by: Geekatplay Studio by Vladimir Chopine
+
+# Personal Configuration Files (NEVER COMMIT THESE)
+config.json.personal
+config_backup.json
+my_config.json
+local_config.json
+
+# API Keys and Secrets (SECURITY)
+*api_key*
+*secret_key*
+*.key
+*.secret
+*credentials*
+
+# User Generated Content
+output/
+downloads/
+temp_models/
+user_generated/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+error.log
+debug.log
+
+# Temporary Files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# User specific files
+user_settings.json
+personal_*/
+local_*/
+
+# Test files with real API keys
+test_with_real_keys.py
+test_personal.py

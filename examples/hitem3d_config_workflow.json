@@ -1,0 +1,37 @@
+{
+  "last_node_id": 2,
+  "last_link_id": 1,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "HiTem3DConfigNode",
+      "pos": [200, 200],
+      "size": [400, 180],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "status",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HiTem3DConfigNode"
+      },
+      "widgets_values": [
+        "YOUR_ACCESS_KEY_HERE",
+        "YOUR_SECRET_KEY_HERE",
+        "https://api.hitem3d.ai",
+        true
+      ]
+    }
+  ],
+  "links": [],
+  "groups": [],
+  "config": {},
+  "extra": {},
+  "version": 0.4
+}

@@ -1,0 +1,12 @@
+{
+    "hitem3d": {
+        "access_key": "YOUR_ACCESS_KEY_HERE",
+        "secret_key": "YOUR_SECRET_KEY_HERE",
+        "api_base_url": "https://api.hitem3d.ai",
+        "default_model": "hitem3dv1.5",
+        "default_resolution": 1024,
+        "default_format": 2,
+        "default_face_count": 1000000,
+        "timeout": 300
+    }
+}
