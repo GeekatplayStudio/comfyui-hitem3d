@@ -1,6 +1,6 @@
 {
   "last_node_id": 5,
-  "last_link_id": 3,
+  "last_link_id": 5,
   "nodes": [
     {
       "id": 1,
@@ -60,6 +60,11 @@
           "name": "front_image",
           "type": "IMAGE",
           "link": 1
+        },
+        {
+          "name": "config_data",
+          "type": "STRING",
+          "link": 4
         }
       ],
       "outputs": [
@@ -104,6 +109,11 @@
           "name": "task_id",
           "type": "STRING",
           "link": 2
+        },
+        {
+          "name": "config_data",
+          "type": "STRING",
+          "link": 5
         }
       ],
       "outputs": [
@@ -193,6 +203,16 @@
           "type": "STRING",
           "links": null,
           "shape": 3
+        },
+        {
+          "name": "config_data",
+          "type": "STRING",
+          "links": [
+            4,
+            5
+          ],
+          "shape": 3,
+          "slot_index": 1
         }
       ],
       "properties": {
@@ -229,6 +249,22 @@
       0,
       4,
       0,
+      "STRING"
+    ],
+    [
+      4,
+      5,
+      1,
+      2,
+      1,
+      "STRING"
+    ],
+    [
+      5,
+      5,
+      1,
+      3,
+      1,
       "STRING"
     ]
   ],

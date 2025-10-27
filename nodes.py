@@ -81,6 +81,7 @@ class HiTem3DNode:
                 "back_image": ("IMAGE",),
                 "left_image": ("IMAGE",),
                 "right_image": ("IMAGE",),
+                "config_data": ("STRING", {"default": ""}),
                 "model": (["hitem3dv1", "hitem3dv1.5", "scene-portraitv1.5"], {"default": "hitem3dv1.5"}),
                 "resolution": ([512, 1024, 1536], {"default": 1024}),
                 "output_format": ([1, 2, 3, 4], {"default": 2}),
@@ -97,14 +98,28 @@ class HiTem3DNode:
     
     def __init__(self):
         self.client = None
-        self._load_client()
+        # Don't auto-load client in __init__, load it when needed
     
-    def _load_client(self):
-        """Load HiTem3D API client from config"""
+    def _load_client(self, use_runtime_config=False):
+        """Load HiTem3D API client from config file or runtime config"""
         try:
+            # First try runtime config from ConfigNode
+            if use_runtime_config:
+                runtime_config = HiTem3DConfigNode.get_runtime_config()
+                if runtime_config:
+                    from hitem3d_comfyui.client import HiTem3DClient
+                    self.client = HiTem3DClient(
+                        access_key=runtime_config["access_key"],
+                        secret_key=runtime_config["secret_key"],
+                        api_base_url=runtime_config["api_base_url"]
+                    )
+                    logger.info("HiTem3D client loaded from runtime configuration")
+                    return
+            
+            # Fallback to file config
             if CONFIG_PATH.exists():
                 self.client = create_client_from_config(str(CONFIG_PATH))
-                logger.info("HiTem3D client loaded successfully")
+                logger.info("HiTem3D client loaded from config file")
             else:
                 logger.error(f"Config file not found: {CONFIG_PATH}")
                 raise FileNotFoundError(f"Config file not found: {CONFIG_PATH}")
@@ -133,6 +148,7 @@ class HiTem3DNode:
                          back_image: Optional[torch.Tensor] = None,
                          left_image: Optional[torch.Tensor] = None,
                          right_image: Optional[torch.Tensor] = None,
+                         config_data: str = "",
                          model: str = "hitem3dv1.5",
                          resolution = 1024,
                          output_format: int = 2,
@@ -146,8 +162,12 @@ class HiTem3DNode:
             Tuple containing task_id
         """
         try:
+            # Try to load client with runtime config first, then fallback to file config
             if self.client is None:
-                self._load_client()
+                try:
+                    self._load_client(use_runtime_config=True)
+                except:
+                    self._load_client(use_runtime_config=False)
             
             logger.info("Starting 3D model generation...")
             
@@ -212,6 +232,7 @@ class HiTem3DDownloaderNode:
                 "task_id": ("STRING", {"default": ""}),
             },
             "optional": {
+                "config_data": ("STRING", {"default": ""}),
                 "output_directory": ("STRING", {"default": "ComfyUI/output/hitem3d/"}),
                 "timeout": ("INT", {"default": 900, "min": 60, "max": 3600, "step": 30}),
             }
@@ -225,7 +246,34 @@ class HiTem3DDownloaderNode:
     
     def __init__(self):
         self.client = None
-        self._load_client()
+        # Don't auto-load client in __init__, load it when needed
+    
+    def _load_client(self, use_runtime_config=False):
+        """Load HiTem3D API client from config file or runtime config"""
+        try:
+            # First try runtime config from ConfigNode
+            if use_runtime_config:
+                runtime_config = HiTem3DConfigNode.get_runtime_config()
+                if runtime_config:
+                    from hitem3d_comfyui.client import HiTem3DClient
+                    self.client = HiTem3DClient(
+                        access_key=runtime_config["access_key"],
+                        secret_key=runtime_config["secret_key"],
+                        api_base_url=runtime_config["api_base_url"]
+                    )
+                    logger.info("HiTem3D client loaded from runtime configuration")
+                    return
+            
+            # Fallback to file config
+            if CONFIG_PATH.exists():
+                self.client = create_client_from_config(str(CONFIG_PATH))
+                logger.info("HiTem3D client loaded from config file")
+            else:
+                logger.error(f"Config file not found: {CONFIG_PATH}")
+                raise FileNotFoundError(f"Config file not found: {CONFIG_PATH}")
+        except Exception as e:
+            logger.error(f"Failed to load HiTem3D client: {str(e)}")
+            raise
     
     def _load_client(self):
         """Load HiTem3D API client from config"""
@@ -242,6 +290,7 @@ class HiTem3DDownloaderNode:
     
     def download_and_wait(self, 
                          task_id: str,
+                         config_data: str = "",
                          output_directory: str = "ComfyUI/output/hitem3d/",
                          timeout: int = 900) -> Tuple[str, str]:
         """
@@ -251,8 +300,12 @@ class HiTem3DDownloaderNode:
             Tuple containing (model_path, status)
         """
         try:
+            # Try to load client with runtime config first, then fallback to file config
             if self.client is None:
-                self._load_client()
+                try:
+                    self._load_client(use_runtime_config=True)
+                except:
+                    self._load_client(use_runtime_config=False)
             
             if not task_id or task_id.startswith("❌"):
                 return (f"❌ DOWNLOAD FAILED: Invalid task ID: {task_id}", "Failed")
@@ -314,23 +367,27 @@ class HiTem3DDownloaderNode:
 class HiTem3DConfigNode:
     """
     ComfyUI node for configuring HiTem3D API credentials
+    Provides runtime configuration for other HiTem3D nodes
     """
+    
+    # Class variable to store runtime config
+    _runtime_config = None
     
     @classmethod
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "access_key": ("STRING", {"default": ""}),
-                "secret_key": ("STRING", {"default": ""}),
+                "access_key": ("STRING", {"default": "YOUR_ACCESS_KEY_HERE"}),
+                "secret_key": ("STRING", {"default": "YOUR_SECRET_KEY_HERE"}),
             },
             "optional": {
                 "api_base_url": ("STRING", {"default": "https://api.hitem3d.ai"}),
-                "save_config": ("BOOLEAN", {"default": True}),
+                "save_config": ("BOOLEAN", {"default": False}),
             }
         }
     
-    RETURN_TYPES = ("STRING",)
-    RETURN_NAMES = ("status",)
+    RETURN_TYPES = ("STRING", "STRING")
+    RETURN_NAMES = ("config_status", "config_data")
     FUNCTION = "update_config"
     CATEGORY = "HiTem3D"
     OUTPUT_NODE = True
@@ -339,16 +396,16 @@ class HiTem3DConfigNode:
                      access_key: str,
                      secret_key: str,
                      api_base_url: str = "https://api.hitem3d.ai",
-                     save_config: bool = True) -> Tuple[str]:
+                     save_config: bool = False) -> Tuple[str, str]:
         """
         Update HiTem3D API configuration
         
         Returns:
-            Tuple containing status message
+            Tuple containing (status_message, config_data)
         """
         try:
-            if not access_key or not secret_key:
-                return ("ERROR: Access key and secret key are required",)
+            if not access_key or not secret_key or access_key == "YOUR_ACCESS_KEY_HERE" or secret_key == "YOUR_SECRET_KEY_HERE":
+                return ("⚠️ CONFIGURATION REQUIRED: Please enter your HiTem3D API credentials", "")
             
             config = {
                 "hitem3d": {
@@ -363,20 +420,28 @@ class HiTem3DConfigNode:
                 }
             }
             
+            # Store runtime config for other nodes to use
+            HiTem3DConfigNode._runtime_config = config["hitem3d"]
+            
             if save_config:
                 with open(CONFIG_PATH, 'w', encoding='utf-8') as f:
                     json.dump(config, f, indent=4)
                 
-                logger.info("Configuration updated and saved")
-                return ("Configuration updated and saved successfully",)
+                logger.info("Configuration updated and saved to file")
+                return ("✅ Configuration updated and saved successfully", str(config))
             else:
-                logger.info("Configuration updated (not saved)")
-                return ("Configuration updated (not saved to file)",)
+                logger.info("Configuration updated (runtime only, not saved to file)")
+                return ("✅ Configuration updated (runtime only, not saved to file)", str(config))
                 
         except Exception as e:
             error_msg = f"Failed to update configuration: {str(e)}"
             logger.error(error_msg)
-            return (f"ERROR: {error_msg}",)
+            return (f"❌ ERROR: {error_msg}", "")
+    
+    @classmethod
+    def get_runtime_config(cls):
+        """Get current runtime configuration"""
+        return cls._runtime_config
 
 
 class HiTem3DPreviewNode:
