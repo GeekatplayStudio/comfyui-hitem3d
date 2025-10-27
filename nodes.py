@@ -82,16 +82,16 @@ class HiTem3DNode:
                 "left_image": ("IMAGE",),
                 "right_image": ("IMAGE",),
                 "model": (["hitem3dv1", "hitem3dv1.5", "scene-portraitv1.5"], {"default": "hitem3dv1.5"}),
-                "resolution": ([512, 1024, 1536, "1536pro"], {"default": 1024}),
-                "output_format": (["obj", "glb", "stl", "fbx"], {"default": "glb"}),
-                "generation_type": (["geometry_only", "texture_only", "both"], {"default": "both"}),
+                "resolution": ([512, 1024, 1536], {"default": 1024}),
+                "output_format": ([1, 2, 3, 4], {"default": 2}),
+                "generation_type": ([1, 2, 3], {"default": 2}),
                 "face_count": ("INT", {"default": 1000000, "min": 100000, "max": 2000000, "step": 10000}),
                 "timeout": ("INT", {"default": 300, "min": 60, "max": 1800, "step": 30}),
             }
         }
     
-    RETURN_TYPES = ("STRING", "STRING", "STRING")
-    RETURN_NAMES = ("model_url", "cover_url", "task_id")
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("task_id",)
     FUNCTION = "generate_3d_model"
     CATEGORY = "HiTem3D"
     
@@ -135,15 +135,15 @@ class HiTem3DNode:
                          right_image: Optional[torch.Tensor] = None,
                          model: str = "hitem3dv1.5",
                          resolution = 1024,
-                         output_format: str = "glb",
-                         generation_type: str = "both",
+                         output_format: int = 2,
+                         generation_type: int = 2,
                          face_count: int = 1000000,
-                         timeout: int = 300) -> Tuple[str, str, str]:
+                         timeout: int = 300) -> Tuple[str]:
         """
         Generate 3D model from input images
         
         Returns:
-            Tuple of (model_url, cover_url, task_id)
+            Tuple containing task_id
         """
         try:
             if self.client is None:
@@ -157,9 +157,9 @@ class HiTem3DNode:
             left_bytes = tensor_to_image_bytes(left_image) if left_image is not None else None
             right_bytes = tensor_to_image_bytes(right_image) if right_image is not None else None
             
-            # Convert parameters
-            format_int = self._format_to_int(output_format)
-            request_type = self._generation_type_to_int(generation_type)
+            # Convert parameters (already integers)
+            format_int = output_format
+            request_type = generation_type
             resolution_int = self._resolution_to_int(resolution)
             
             # Create task
@@ -177,19 +177,9 @@ class HiTem3DNode:
             )
             
             logger.info(f"Task created: {task_id}")
-            logger.info("Waiting for completion...")
+            logger.info("Task submitted successfully! Use Downloader node to wait and download the result.")
             
-            # Wait for completion
-            result = self.client.wait_for_completion(task_id, timeout=timeout)
-            
-            model_url = result.get('url', '')
-            cover_url = result.get('cover_url', '')
-            
-            logger.info("3D model generation completed successfully!")
-            logger.info(f"Model URL: {model_url}")
-            logger.info(f"Cover URL: {cover_url}")
-            
-            return (model_url, cover_url, task_id)
+            return (task_id,)
             
         except Exception as e:
             error_msg = str(e)
@@ -207,29 +197,29 @@ class HiTem3DNode:
                 error_msg = f"❌ GENERATION FAILED: {error_msg}"
             
             logger.error(error_msg)
-            return (error_msg, "", "")
+            return (error_msg,)
 
 
 class HiTem3DDownloaderNode:
     """
-    ComfyUI node for downloading 3D models from HiTem3D URLs
+    ComfyUI node for downloading 3D models from HiTem3D task results
     """
     
     @classmethod
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "model_url": ("STRING", {"default": ""}),
-                "filename": ("STRING", {"default": "model"}),
+                "task_id": ("STRING", {"default": ""}),
             },
             "optional": {
-                "output_directory": ("STRING", {"default": "output/hitem3d"}),
+                "output_directory": ("STRING", {"default": "ComfyUI/output/hitem3d/"}),
+                "timeout": ("INT", {"default": 900, "min": 60, "max": 3600, "step": 30}),
             }
         }
     
-    RETURN_TYPES = ("STRING",)
-    RETURN_NAMES = ("file_path",)
-    FUNCTION = "download_model"
+    RETURN_TYPES = ("STRING", "STRING")
+    RETURN_NAMES = ("model_path", "status")
+    FUNCTION = "download_and_wait"
     CATEGORY = "HiTem3D"
     OUTPUT_NODE = True
     
@@ -250,22 +240,30 @@ class HiTem3DDownloaderNode:
             logger.error(f"Failed to load HiTem3D client: {str(e)}")
             raise
     
-    def download_model(self, 
-                      model_url: str,
-                      filename: str = "model",
-                      output_directory: str = "output/hitem3d") -> Tuple[str]:
+    def download_and_wait(self, 
+                         task_id: str,
+                         output_directory: str = "ComfyUI/output/hitem3d/",
+                         timeout: int = 900) -> Tuple[str, str]:
         """
-        Download 3D model from URL
+        Wait for task completion and download the 3D model
         
         Returns:
-            Tuple containing the local file path
+            Tuple containing (model_path, status)
         """
         try:
             if self.client is None:
                 self._load_client()
             
-            if not model_url or model_url.startswith("❌"):
-                return (f"❌ DOWNLOAD FAILED: Invalid or error model URL: {model_url}",)
+            if not task_id or task_id.startswith("❌"):
+                return (f"❌ DOWNLOAD FAILED: Invalid task ID: {task_id}", "Failed")
+            
+            # Wait for task completion
+            logger.info(f"Waiting for task completion: {task_id}")
+            result = self.client.wait_for_completion(task_id, timeout=timeout)
+            
+            model_url = result.get('url', '')
+            if not model_url:
+                return ("❌ DOWNLOAD FAILED: No model URL in task result", "Failed")
             
             # Determine file extension from URL
             if model_url.endswith('.glb'):
@@ -279,25 +277,35 @@ class HiTem3DDownloaderNode:
             else:
                 extension = '.glb'  # Default
             
+            # Create timestamped filename to avoid overwriting
+            import datetime
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"hitem3d_model_{timestamp}{extension}"
+            
             # Create output path
             output_dir = Path(output_directory)
             output_dir.mkdir(parents=True, exist_ok=True)
             
-            output_path = output_dir / f"{filename}{extension}"
+            output_path = output_dir / filename
             
             # Download the model
             logger.info(f"Downloading model from: {model_url}")
             downloaded_path = self.client.download_model(model_url, str(output_path))
             
             logger.info(f"Model downloaded to: {downloaded_path}")
-            return (downloaded_path,)
+            return (downloaded_path, "Downloaded successfully")
             
         except Exception as e:
             error_msg = str(e)
-            if "Invalid or error model URL" in error_msg:
-                error_msg = "❌ DOWNLOAD FAILED: No valid model URL provided. Check if 3D generation completed successfully."
+            if "timeout" in error_msg.lower():
+                error_msg = "⏱️ TIMEOUT: Task is taking longer than expected. You can increase timeout or check status later."
+            elif "Task failed" in error_msg:
+                error_msg = "❌ GENERATION FAILED: The 3D model generation task failed on the server."
             else:
                 error_msg = f"❌ DOWNLOAD FAILED: {error_msg}"
+            
+            logger.error(error_msg)
+            return (error_msg, "Failed")
             
             logger.error(error_msg)
             return (error_msg,)
