@@ -1,12 +1,12 @@
 {
-  "last_node_id": 4,
-  "last_link_id": 4,
+  "last_node_id": 8,
+  "last_link_id": 8,
   "nodes": [
     {
       "id": 1,
       "type": "LoadImage",
       "pos": [100, 100],
-      "size": [320, 314],
+      "size": [315, 314],
       "flags": {},
       "order": 0,
       "mode": 0,
@@ -32,11 +32,35 @@
     },
     {
       "id": 2,
+      "type": "HiTem3DConfigNode",
+      "pos": [100, 450],
+      "size": [320, 150],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "config_data",
+          "type": "STRING",
+          "links": [2, 3]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HiTem3DConfigNode"
+      },
+      "widgets_values": [
+        "",
+        "",
+        false
+      ]
+    },
+    {
+      "id": 3,
       "type": "HiTem3DNode",
       "pos": [500, 100],
       "size": [400, 580],
       "flags": {},
-      "order": 1,
+      "order": 2,
       "mode": 0,
       "inputs": [
         {
@@ -47,14 +71,24 @@
         {
           "name": "config_data",
           "type": "STRING",
-          "link": 3
+          "link": 2
         }
       ],
       "outputs": [
         {
+          "name": "model_url",
+          "type": "STRING",
+          "links": [4, 5]
+        },
+        {
+          "name": "cover_url",
+          "type": "STRING",
+          "links": [6]
+        },
+        {
           "name": "task_id",
           "type": "STRING",
-          "links": [2]
+          "links": [7]
         }
       ],
       "properties": {
@@ -70,30 +104,30 @@
       ]
     },
     {
-      "id": 3,
+      "id": 4,
       "type": "HiTem3DDownloaderNode",
       "pos": [950, 100],
       "size": [350, 200],
       "flags": {},
-      "order": 2,
+      "order": 3,
       "mode": 0,
       "inputs": [
         {
-          "name": "task_id",
+          "name": "model_url",
           "type": "STRING",
-          "link": 2
+          "link": 4
         },
         {
           "name": "config_data",
           "type": "STRING",
-          "link": 4
+          "link": 3
         }
       ],
       "outputs": [
         {
           "name": "model_path",
           "type": "STRING",
-          "links": null
+          "links": [8]
         },
         {
           "name": "status",
@@ -105,77 +139,125 @@
         "Node name for S&R": "HiTem3DDownloaderNode"
       },
       "widgets_values": [
-        "ComfyUI/output/hitem3d/basic/",
-        300
+        "my_model",
+        "ComfyUI/output/hitem3d/"
       ]
     },
     {
-      "id": 4,
-      "type": "HiTem3DConfigNode",
-      "pos": [100, 450],
-      "size": [320, 150],
+      "id": 5,
+      "type": "HiTem3DPreviewNode",
+      "pos": [1350, 100],
+      "size": [400, 300],
       "flags": {},
-      "order": 3,
+      "order": 4,
       "mode": 0,
+      "inputs": [
+        {
+          "name": "model_path",
+          "type": "STRING",
+          "link": 8
+        }
+      ],
       "outputs": [
         {
-          "name": "config_status",
+          "name": "preview_html",
           "type": "STRING",
           "links": null
-        },
-        {
-          "name": "config_data",
-          "type": "STRING",
-          "links": [3, 4]
         }
       ],
       "properties": {
-        "Node name for S&R": "HiTem3DConfigNode"
+        "Node name for S&R": "HiTem3DPreviewNode"
       },
       "widgets_values": [
-        "YOUR_ACCESS_KEY_HERE",
-        "YOUR_SECRET_KEY_HERE",
-        "https://api.hitem3d.ai",
-        false
+        600,
+        400,
+        "#f0f0f0",
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": 6,
+      "type": "ShowText|pysssss",
+      "pos": [950, 350],
+      "size": [350, 140],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 5
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ShowText|pysssss"
+      },
+      "widgets_values": [
+        "",
+        "Model URL"
+      ]
+    },
+    {
+      "id": 7,
+      "type": "ShowText|pysssss",
+      "pos": [950, 520],
+      "size": [350, 140],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 6
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ShowText|pysssss"
+      },
+      "widgets_values": [
+        "",
+        "Cover URL"
+      ]
+    },
+    {
+      "id": 8,
+      "type": "ShowText|pysssss",
+      "pos": [950, 690],
+      "size": [350, 140],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 7
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ShowText|pysssss"
+      },
+      "widgets_values": [
+        "",
+        "Task ID"
       ]
     }
   ],
   "links": [
-    [1, 1, 0, 2, 0, "IMAGE"],
-    [2, 2, 0, 3, 0, "STRING"],
-    [3, 4, 1, 2, 1, "STRING"],
-    [4, 4, 1, 3, 1, "STRING"]
+    [1, 1, 0, 3, 0, "IMAGE"],
+    [2, 2, 0, 3, 1, "STRING"],
+    [3, 2, 0, 4, 1, "STRING"],
+    [4, 3, 0, 4, 0, "STRING"],
+    [5, 3, 0, 6, 0, "STRING"],
+    [6, 3, 1, 7, 0, "STRING"],
+    [7, 3, 2, 8, 0, "STRING"],
+    [8, 4, 0, 5, 0, "STRING"]
   ],
-  "groups": [
-    {
-      "title": "📸 Input Image",
-      "bounding": [70, 60, 380, 380],
-      "color": "#3f789e",
-      "font_size": 18,
-      "locked": false
-    },
-    {
-      "title": "🏗️ Basic 3D Generation",
-      "bounding": [470, 60, 460, 650],
-      "color": "#a1309b", 
-      "font_size": 18,
-      "locked": false
-    },
-    {
-      "title": "💾 Download Result",
-      "bounding": [920, 60, 410, 280],
-      "color": "#88a",
-      "font_size": 18,
-      "locked": false
-    },
-    {
-      "title": "🔑 API Configuration",
-      "bounding": [70, 410, 380, 200],
-      "color": "#8b4513",
-      "font_size": 18,
-      "locked": false
-    }
-  ],
+  "groups": [],
   "config": {},
   "extra": {},
   "version": 0.4
