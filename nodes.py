@@ -81,18 +81,18 @@ class HiTem3DNode:
                 "back_image": ("IMAGE",),
                 "left_image": ("IMAGE",),
                 "right_image": ("IMAGE",),
-                "config_data": ("STRING", {"default": ""}),
-                "model": (["hitem3dv1", "hitem3dv1.5", "scene-portraitv1.5"], {"default": "hitem3dv1.5"}),
+                "model": (["hitem3dv1", "hitem3dv1.5", "scene-portraitv1.5", "promodel"], {"default": "hitem3dv1.5"}),
                 "resolution": ([512, 1024, 1536], {"default": 1024}),
                 "output_format": (["obj", "glb", "stl", "fbx"], {"default": "glb"}),
                 "generation_type": (["geometry_only", "texture_only", "both"], {"default": "both"}),
                 "face_count": ("INT", {"default": 1000000, "min": 100000, "max": 2000000, "step": 10000}),
                 "timeout": ("INT", {"default": 300, "min": 60, "max": 1800, "step": 30}),
+                "config_data": ("STRING", {"default": ""}),
             }
         }
     
-    RETURN_TYPES = ("STRING",)
-    RETURN_NAMES = ("task_id",)
+    RETURN_TYPES = ("STRING", "STRING", "STRING")
+    RETURN_NAMES = ("model_url", "cover_url", "task_id")
     FUNCTION = "generate_3d_model"
     CATEGORY = "HiTem3D"
     
@@ -148,18 +148,18 @@ class HiTem3DNode:
                          back_image: Optional[torch.Tensor] = None,
                          left_image: Optional[torch.Tensor] = None,
                          right_image: Optional[torch.Tensor] = None,
-                         config_data: str = "",
                          model: str = "hitem3dv1.5",
                          resolution = 1024,
                          output_format: str = "glb",
                          generation_type: str = "both",
                          face_count: int = 1000000,
-                         timeout: int = 300) -> Tuple[str]:
+                         timeout: int = 300,
+                         config_data: str = "") -> Tuple[str, str, str]:
         """
-        Generate 3D model from input images
+        Generate 3D model from input images and wait for completion
         
         Returns:
-            Tuple containing task_id
+            Tuple containing (model_url, cover_url, task_id)
         """
         try:
             # Try to load client with runtime config first, then fallback to file config
@@ -197,9 +197,29 @@ class HiTem3DNode:
             )
             
             logger.info(f"Task created: {task_id}")
-            logger.info("Task submitted successfully! Use Downloader node to wait and download the result.")
+            logger.info("Waiting for task completion...")
             
-            return (task_id,)
+            # Wait for task completion
+            result = self.client.wait_for_completion(task_id, timeout)
+            
+            if result.get('status') == 'completed':
+                model_url = result.get('url', '')
+                cover_url = result.get('cover_url', '')
+                
+                # Check if we got a valid model URL
+                if model_url:
+                    logger.info("✅ GENERATION COMPLETED! Model and cover URLs ready.")
+                    logger.info(f"Model URL: {model_url}")
+                    logger.info(f"Cover URL: {cover_url}")
+                    return (model_url, cover_url, task_id)
+                else:
+                    # Task completed but no URL - log the full result for debugging
+                    logger.error(f"❌ GENERATION COMPLETED but no model URL found. Result: {result}")
+                    return ("❌ GENERATION COMPLETED but no model URL returned", "", task_id)
+            else:
+                error_msg = result.get('error', f"Task status: {result.get('status', 'unknown')}")
+                logger.error(f"❌ GENERATION FAILED: {error_msg}")
+                return ("", "", task_id)
             
         except Exception as e:
             error_msg = str(e)
@@ -217,7 +237,7 @@ class HiTem3DNode:
                 error_msg = f"❌ GENERATION FAILED: {error_msg}"
             
             logger.error(error_msg)
-            return (error_msg,)
+            return (error_msg, "", "")
 
 
 class HiTem3DDownloaderNode:
@@ -229,18 +249,18 @@ class HiTem3DDownloaderNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "task_id": ("STRING", {"default": ""}),
+                "model_url": ("STRING", {"default": ""}),
+                "file_name": ("STRING", {"default": "model"}),
+                "output_directory": ("STRING", {"default": "ComfyUI/output/hitem3d/"}),
             },
             "optional": {
                 "config_data": ("STRING", {"default": ""}),
-                "output_directory": ("STRING", {"default": "ComfyUI/output/hitem3d/"}),
-                "timeout": ("INT", {"default": 900, "min": 60, "max": 3600, "step": 30}),
             }
         }
     
     RETURN_TYPES = ("STRING", "STRING")
     RETURN_NAMES = ("model_path", "status")
-    FUNCTION = "download_and_wait"
+    FUNCTION = "download_model"
     CATEGORY = "HiTem3D"
     OUTPUT_NODE = True
     
@@ -275,12 +295,26 @@ class HiTem3DDownloaderNode:
             logger.error(f"Failed to load HiTem3D client: {str(e)}")
             raise
     
-    def _load_client(self):
-        """Load HiTem3D API client from config"""
+    def _load_client(self, use_runtime_config=False):
+        """Load HiTem3D API client from config file or runtime config"""
         try:
+            # First try runtime config from ConfigNode
+            if use_runtime_config:
+                runtime_config = HiTem3DConfigNode.get_runtime_config()
+                if runtime_config:
+                    from hitem3d_comfyui.client import HiTem3DClient
+                    self.client = HiTem3DClient(
+                        access_key=runtime_config["access_key"],
+                        secret_key=runtime_config["secret_key"],
+                        api_base_url=runtime_config.get("api_base_url", "https://api.hitem3d.ai")
+                    )
+                    logger.info("HiTem3D client loaded from runtime config")
+                    return
+            
+            # Fallback to config file
             if CONFIG_PATH.exists():
                 self.client = create_client_from_config(str(CONFIG_PATH))
-                logger.info("HiTem3D client loaded successfully")
+                logger.info("HiTem3D client loaded from config file")
             else:
                 logger.error(f"Config file not found: {CONFIG_PATH}")
                 raise FileNotFoundError(f"Config file not found: {CONFIG_PATH}")
@@ -288,13 +322,13 @@ class HiTem3DDownloaderNode:
             logger.error(f"Failed to load HiTem3D client: {str(e)}")
             raise
     
-    def download_and_wait(self, 
-                         task_id: str,
-                         config_data: str = "",
+    def download_model(self, 
+                         model_url: str,
+                         file_name: str = "model",
                          output_directory: str = "ComfyUI/output/hitem3d/",
-                         timeout: int = 900) -> Tuple[str, str]:
+                         config_data: str = "") -> Tuple[str, str]:
         """
-        Wait for task completion and download the 3D model
+        Download 3D model from provided URL
         
         Returns:
             Tuple containing (model_path, status)
@@ -307,16 +341,8 @@ class HiTem3DDownloaderNode:
                 except:
                     self._load_client(use_runtime_config=False)
             
-            if not task_id or task_id.startswith("❌"):
-                return (f"❌ DOWNLOAD FAILED: Invalid task ID: {task_id}", "Failed")
-            
-            # Wait for task completion
-            logger.info(f"Waiting for task completion: {task_id}")
-            result = self.client.wait_for_completion(task_id, timeout=timeout)
-            
-            model_url = result.get('url', '')
-            if not model_url:
-                return ("❌ DOWNLOAD FAILED: No model URL in task result", "Failed")
+            if not model_url or model_url.startswith("❌"):
+                return (f"❌ DOWNLOAD FAILED: Invalid model URL: {model_url}", "Failed")
             
             # Determine file extension from URL
             if model_url.endswith('.glb'):
@@ -333,7 +359,7 @@ class HiTem3DDownloaderNode:
             # Create timestamped filename to avoid overwriting
             import datetime
             timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-            filename = f"hitem3d_model_{timestamp}{extension}"
+            filename = f"{file_name}_{timestamp}{extension}"
             
             # Create output path
             output_dir = Path(output_directory)
@@ -458,8 +484,8 @@ class HiTem3DPreviewNode:
             },
             "optional": {
                 "width": ("INT", {"default": 512, "min": 256, "max": 2048, "step": 64}),
-                "height": ("INT", {"default": 512, "min": 256, "max": 2048, "step": 64}),
-                "background_color": (["#000000", "#FFFFFF", "#808080", "#404040"], {"default": "#404040"}),
+                "height": ("INT", {"default": 400, "min": 256, "max": 2048, "step": 64}),
+                "background_color": (["#000000", "#FFFFFF", "#808080", "#f0f0f0"], {"default": "#f0f0f0"}),
                 "auto_rotate": ("BOOLEAN", {"default": True}),
                 "show_wireframe": ("BOOLEAN", {"default": False}),
                 "show_grid": ("BOOLEAN", {"default": True}),
@@ -472,7 +498,7 @@ class HiTem3DPreviewNode:
     CATEGORY = "HiTem3D"
     OUTPUT_NODE = True
     
-    def preview_3d_model(self, model_path, width=512, height=512, background_color="#404040", 
+    def preview_3d_model(self, model_path, width=512, height=400, background_color="#f0f0f0", 
                          auto_rotate=True, show_wireframe=False, show_grid=True):
         """Generate HTML preview of 3D model"""
         try:

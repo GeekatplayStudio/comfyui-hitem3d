@@ -1,7 +1,7 @@
 {
     "hitem3d": {
-        "access_key": "ak_8a3a3868714543e2a661635f45ea09a0",
-        "secret_key": "sk_fe8e0f077fd344149969e4eb1fb3a344",
+        "access_key": "",
+        "secret_key": "",
         "api_base_url": "https://api.hitem3d.ai",
         "default_model": "hitem3dv1.5",
         "default_resolution": 1024,
