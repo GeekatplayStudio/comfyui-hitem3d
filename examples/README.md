@@ -80,7 +80,52 @@ This directory contains example workflows demonstrating how to use the HiTem3D c
 - Higher resolution (1536) recommended for better quality
 - Increase face count (2,000,000) for more detail
 
-### 4. `hitem3d_config_workflow.json` - API Configuration
+### 4. `hitem3d_showcase_preview_workflow.json` - Premium Preview Showcase ⭐ NEW!
+**Purpose**: Demonstrates the 3D preview node with optimal settings and large display.
+
+**Nodes Used**:
+- LoadImage: Input image
+- HiTem3DNode: 3D generation
+- HiTem3DDownloaderNode: Model download
+- **HiTem3DPreviewNode**: Large 1024x768 interactive preview
+- HiTem3DConfigNode: API configuration
+
+**Features**:
+- 🎮 **Large preview window** (1024x768) for detailed viewing
+- 🔄 **Auto-rotation enabled** for better model showcase
+- 🎨 **Professional layout** with organized node groups
+- 📊 **Status feedback** and clear workflow structure
+
+### 5. `hitem3d_multiview_preview_workflow.json` - Multi-View with Dual Preview ⭐ NEW!
+**Purpose**: Advanced multi-view generation with two different preview modes.
+
+**Nodes Used**:
+- 4x LoadImage: Front, back, left, right views
+- HiTem3DNode: High-quality multi-view generation
+- HiTem3DDownloaderNode: Download generated model
+- **2x HiTem3DPreviewNode**: Dual preview modes
+
+**Dual Preview Features**:
+- 📺 **Main Preview**: Large view (1024x768) with auto-rotation
+- 🔍 **Detail Preview**: Wireframe mode for geometry inspection
+- 🎨 **Different backgrounds**: Gray and white for contrast
+- 📐 **Grid toggles**: Reference grid options
+
+**Settings**:
+- Resolution: 1536 (highest quality)
+- Face Count: 2,000,000 (maximum detail)
+- Timeout: 900 seconds (longer for complex models)
+
+### 6. `hitem3d_complete_preview_workflow.json` - Multi-Preview Gallery ⭐ NEW!
+**Purpose**: Showcase workflow with three different preview modes and status monitoring.
+
+**Features**:
+- 🎮 **Triple Preview Gallery**: Three different preview configurations
+- 📊 **Status Monitoring**: Real-time status updates
+- 🎨 **Multiple View Modes**: Auto-rotate, wireframe, different backgrounds
+- 📋 **Complete Documentation**: Built-in notes and instructions
+
+### 7. `hitem3d_config_workflow.json` - API Configuration
 **Purpose**: Update your HiTem3D API credentials.
 
 **Nodes Used**:

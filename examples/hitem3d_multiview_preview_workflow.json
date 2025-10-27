@@ -1,0 +1,532 @@
+{
+  "last_node_id": 10,
+  "last_link_id": 12,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "LoadImage",
+      "pos": [
+        50,
+        50
+      ],
+      "size": {
+        "0": 200,
+        "1": 250
+      },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            1
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "front_view.jpg",
+        "image"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 2,
+      "type": "LoadImage",
+      "pos": [
+        50,
+        320
+      ],
+      "size": {
+        "0": 200,
+        "1": 250
+      },
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            2
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "back_view.jpg",
+        "image"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 3,
+      "type": "LoadImage",
+      "pos": [
+        50,
+        590
+      ],
+      "size": {
+        "0": 200,
+        "1": 250
+      },
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            3
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "left_view.jpg",
+        "image"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 4,
+      "type": "LoadImage",
+      "pos": [
+        270,
+        590
+      ],
+      "size": {
+        "0": 200,
+        "1": 250
+      },
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            4
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "right_view.jpg",
+        "image"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 5,
+      "type": "HiTem3DNode",
+      "pos": [
+        520,
+        50
+      ],
+      "size": {
+        "0": 400,
+        "1": 580
+      },
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "front_image",
+          "type": "IMAGE",
+          "link": 1
+        },
+        {
+          "name": "back_image",
+          "type": "IMAGE",
+          "link": 2
+        },
+        {
+          "name": "left_image",
+          "type": "IMAGE",
+          "link": 3
+        },
+        {
+          "name": "right_image",
+          "type": "IMAGE",
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "task_id",
+          "type": "STRING",
+          "links": [
+            5
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HiTem3DNode"
+      },
+      "widgets_values": [
+        "hitem3dv1.5",
+        1536,
+        2,
+        2,
+        2000000,
+        900
+      ],
+      "color": "#2a363b",
+      "bgcolor": "#3f5159"
+    },
+    {
+      "id": 6,
+      "type": "HiTem3DDownloaderNode",
+      "pos": [
+        970,
+        50
+      ],
+      "size": {
+        "0": 350,
+        "1": 200
+      },
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "task_id",
+          "type": "STRING",
+          "link": 5
+        }
+      ],
+      "outputs": [
+        {
+          "name": "model_path",
+          "type": "STRING",
+          "links": [
+            6,
+            7
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "status",
+          "type": "STRING",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HiTem3DDownloaderNode"
+      },
+      "widgets_values": [
+        "ComfyUI/output/hitem3d/multiview/",
+        900
+      ],
+      "color": "#233",
+      "bgcolor": "#355"
+    },
+    {
+      "id": 7,
+      "type": "HiTem3DPreviewNode",
+      "pos": [
+        970,
+        300
+      ],
+      "size": {
+        "0": 500,
+        "1": 450
+      },
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model_path",
+          "type": "STRING",
+          "link": 6
+        }
+      ],
+      "outputs": [
+        {
+          "name": "preview_html",
+          "type": "STRING",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HiTem3DPreviewNode"
+      },
+      "widgets_values": [
+        "",
+        1024,
+        768,
+        "#404040",
+        true,
+        false,
+        true
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 8,
+      "type": "HiTem3DPreviewNode",
+      "pos": [
+        1520,
+        300
+      ],
+      "size": {
+        "0": 400,
+        "1": 450
+      },
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model_path",
+          "type": "STRING",
+          "link": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "preview_html",
+          "type": "STRING",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HiTem3DPreviewNode"
+      },
+      "widgets_values": [
+        "",
+        512,
+        512,
+        "#FFFFFF",
+        false,
+        true,
+        false
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 9,
+      "type": "HiTem3DConfigNode",
+      "pos": [
+        270,
+        320
+      ],
+      "size": {
+        "0": 200,
+        "1": 150
+      },
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "config_status",
+          "type": "STRING",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HiTem3DConfigNode"
+      },
+      "widgets_values": [
+        "YOUR_ACCESS_KEY_HERE",
+        "YOUR_SECRET_KEY_HERE",
+        "https://api.hitem3d.ai",
+        true
+      ],
+      "color": "#233",
+      "bgcolor": "#355"
+    },
+    {
+      "id": 10,
+      "type": "Note|pysssss",
+      "pos": [
+        520,
+        670
+      ],
+      "size": {
+        "0": 400,
+        "1": 180
+      },
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "properties": {
+        "text": "🎯 Multi-View HiTem3D with Dual Preview\n\nCreated by: Geekatplay Studio by Vladimir Chopine\nWebsite: www.geekatplay.com\n\n🔄 Multi-View Benefits:\n• Higher quality 3D models\n• Better detail reconstruction\n• More accurate proportions\n\n🎮 Dual Preview:\n• Main: Large view with auto-rotate\n• Detail: Wireframe mode for geometry inspection\n\n💰 Get Credits: hitem3d.ai/?sp_source=Geekatplay"
+      },
+      "widgets_values": [
+        "🎯 Multi-View HiTem3D with Dual Preview\n\nCreated by: Geekatplay Studio by Vladimir Chopine\nWebsite: www.geekatplay.com\n\n🔄 Multi-View Benefits:\n• Higher quality 3D models\n• Better detail reconstruction\n• More accurate proportions\n\n🎮 Dual Preview:\n• Main: Large view with auto-rotate\n• Detail: Wireframe mode for geometry inspection\n\n💰 Get Credits: hitem3d.ai/?sp_source=Geekatplay"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      5,
+      0,
+      "IMAGE"
+    ],
+    [
+      2,
+      2,
+      0,
+      5,
+      1,
+      "IMAGE"
+    ],
+    [
+      3,
+      3,
+      0,
+      5,
+      2,
+      "IMAGE"
+    ],
+    [
+      4,
+      4,
+      0,
+      5,
+      3,
+      "IMAGE"
+    ],
+    [
+      5,
+      5,
+      0,
+      6,
+      0,
+      "STRING"
+    ],
+    [
+      6,
+      6,
+      0,
+      7,
+      0,
+      "STRING"
+    ],
+    [
+      7,
+      6,
+      0,
+      8,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "title": "📸 Multi-View Input Images",
+      "bounding": [
+        20,
+        10,
+        480,
+        870
+      ],
+      "color": "#3f789e",
+      "font_size": 20,
+      "locked": false
+    },
+    {
+      "title": "🏗️ High-Quality 3D Generation",
+      "bounding": [
+        490,
+        10,
+        460,
+        650
+      ],
+      "color": "#a1309b",
+      "font_size": 20,
+      "locked": false
+    },
+    {
+      "title": "🎮 Dual 3D Preview Gallery",
+      "bounding": [
+        940,
+        10,
+        1010,
+        780
+      ],
+      "color": "#88a",
+      "font_size": 20,
+      "locked": false
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.6209213230591536,
+      "offset": [
+        89.6346549904943,
+        61.03624344940664
+      ]
+    }
+  },
+  "version": 0.4
+}
