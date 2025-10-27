@@ -84,8 +84,8 @@ class HiTem3DNode:
                 "config_data": ("STRING", {"default": ""}),
                 "model": (["hitem3dv1", "hitem3dv1.5", "scene-portraitv1.5"], {"default": "hitem3dv1.5"}),
                 "resolution": ([512, 1024, 1536], {"default": 1024}),
-                "output_format": ([1, 2, 3, 4], {"default": 2}),
-                "generation_type": ([1, 2, 3], {"default": 2}),
+                "output_format": (["obj", "glb", "stl", "fbx"], {"default": "glb"}),
+                "generation_type": (["geometry_only", "texture_only", "both"], {"default": "both"}),
                 "face_count": ("INT", {"default": 1000000, "min": 100000, "max": 2000000, "step": 10000}),
                 "timeout": ("INT", {"default": 300, "min": 60, "max": 1800, "step": 30}),
             }
@@ -151,8 +151,8 @@ class HiTem3DNode:
                          config_data: str = "",
                          model: str = "hitem3dv1.5",
                          resolution = 1024,
-                         output_format: int = 2,
-                         generation_type: int = 2,
+                         output_format: str = "glb",
+                         generation_type: str = "both",
                          face_count: int = 1000000,
                          timeout: int = 300) -> Tuple[str]:
         """
@@ -177,9 +177,9 @@ class HiTem3DNode:
             left_bytes = tensor_to_image_bytes(left_image) if left_image is not None else None
             right_bytes = tensor_to_image_bytes(right_image) if right_image is not None else None
             
-            # Convert parameters (already integers)
-            format_int = output_format
-            request_type = generation_type
+            # Convert parameters (back to integers for API)
+            format_int = self._format_to_int(output_format)
+            request_type = self._generation_type_to_int(generation_type)
             resolution_int = self._resolution_to_int(resolution)
             
             # Create task

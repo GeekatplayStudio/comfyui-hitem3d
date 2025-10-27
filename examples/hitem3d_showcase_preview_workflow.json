@@ -84,8 +84,8 @@
       "widgets_values": [
         "hitem3dv1.5",
         1024,
-        2,
-        2,
+        "glb",
+        "both",
         1000000,
         600
       ]
