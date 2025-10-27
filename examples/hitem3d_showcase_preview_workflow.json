@@ -1,6 +1,6 @@
 {
-  "last_node_id": 6,
-  "last_link_id": 8,
+  "last_node_id": 5,
+  "last_link_id": 3,
   "nodes": [
     {
       "id": 1,
@@ -39,9 +39,7 @@
       "widgets_values": [
         "example_image.jpg",
         "image"
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
+      ]
     },
     {
       "id": 2,
@@ -85,9 +83,7 @@
         2,
         1000000,
         600
-      ],
-      "color": "#2a363b",
-      "bgcolor": "#3f5159"
+      ]
     },
     {
       "id": 3,
@@ -133,9 +129,7 @@
       "widgets_values": [
         "ComfyUI/output/hitem3d/",
         600
-      ],
-      "color": "#233",
-      "bgcolor": "#355"
+      ]
     },
     {
       "id": 4,
@@ -177,9 +171,7 @@
         true,
         false,
         true
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
+      ]
     },
     {
       "id": 5,
@@ -211,32 +203,7 @@
         "YOUR_SECRET_KEY_HERE",
         "https://api.hitem3d.ai",
         true
-      ],
-      "color": "#233",
-      "bgcolor": "#355"
-    },
-    {
-      "id": 6,
-      "type": "Note|pysssss",
-      "pos": [
-        450,
-        720
-      ],
-      "size": {
-        "0": 400,
-        "1": 180
-      },
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "properties": {
-        "text": "🎯 HiTem3D with Interactive 3D Preview\n\nCreated by: Geekatplay Studio by Vladimir Chopine\nWebsite: www.geekatplay.com\nYouTube: @geekatplay\n\n🎮 Preview Controls:\n• Mouse: Rotate, zoom, pan\n• Buttons: Reset view, wireframe, auto-rotate, grid\n• Backgrounds: Multiple color options\n\n💰 Get HiTem3D Credits:\nhitem3d.ai/?sp_source=Geekatplay"
-      },
-      "widgets_values": [
-        "🎯 HiTem3D with Interactive 3D Preview\n\nCreated by: Geekatplay Studio by Vladimir Chopine\nWebsite: www.geekatplay.com\nYouTube: @geekatplay\n\n🎮 Preview Controls:\n• Mouse: Rotate, zoom, pan\n• Buttons: Reset view, wireframe, auto-rotate, grid\n• Backgrounds: Multiple color options\n\n💰 Get HiTem3D Credits:\nhitem3d.ai/?sp_source=Geekatplay"
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
+      ]
     }
   ],
   "links": [

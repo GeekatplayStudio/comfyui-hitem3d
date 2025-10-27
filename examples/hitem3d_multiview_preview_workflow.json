@@ -1,6 +1,6 @@
 {
-  "last_node_id": 10,
-  "last_link_id": 12,
+  "last_node_id": 9,
+  "last_link_id": 7,
   "nodes": [
     {
       "id": 1,
@@ -39,9 +39,7 @@
       "widgets_values": [
         "front_view.jpg",
         "image"
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
+      ]
     },
     {
       "id": 2,
@@ -80,9 +78,7 @@
       "widgets_values": [
         "back_view.jpg",
         "image"
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
+      ]
     },
     {
       "id": 3,
@@ -121,9 +117,7 @@
       "widgets_values": [
         "left_view.jpg",
         "image"
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
+      ]
     },
     {
       "id": 4,
@@ -162,9 +156,7 @@
       "widgets_values": [
         "right_view.jpg",
         "image"
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
+      ]
     },
     {
       "id": 5,
@@ -223,9 +215,7 @@
         2,
         2000000,
         900
-      ],
-      "color": "#2a363b",
-      "bgcolor": "#3f5159"
+      ]
     },
     {
       "id": 6,
@@ -272,9 +262,7 @@
       "widgets_values": [
         "ComfyUI/output/hitem3d/multiview/",
         900
-      ],
-      "color": "#233",
-      "bgcolor": "#355"
+      ]
     },
     {
       "id": 7,
@@ -316,9 +304,7 @@
         true,
         false,
         true
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
+      ]
     },
     {
       "id": 8,
@@ -360,9 +346,7 @@
         false,
         true,
         false
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
+      ]
     },
     {
       "id": 9,
@@ -394,32 +378,7 @@
         "YOUR_SECRET_KEY_HERE",
         "https://api.hitem3d.ai",
         true
-      ],
-      "color": "#233",
-      "bgcolor": "#355"
-    },
-    {
-      "id": 10,
-      "type": "Note|pysssss",
-      "pos": [
-        520,
-        670
-      ],
-      "size": {
-        "0": 400,
-        "1": 180
-      },
-      "flags": {},
-      "order": 9,
-      "mode": 0,
-      "properties": {
-        "text": "🎯 Multi-View HiTem3D with Dual Preview\n\nCreated by: Geekatplay Studio by Vladimir Chopine\nWebsite: www.geekatplay.com\n\n🔄 Multi-View Benefits:\n• Higher quality 3D models\n• Better detail reconstruction\n• More accurate proportions\n\n🎮 Dual Preview:\n• Main: Large view with auto-rotate\n• Detail: Wireframe mode for geometry inspection\n\n💰 Get Credits: hitem3d.ai/?sp_source=Geekatplay"
-      },
-      "widgets_values": [
-        "🎯 Multi-View HiTem3D with Dual Preview\n\nCreated by: Geekatplay Studio by Vladimir Chopine\nWebsite: www.geekatplay.com\n\n🔄 Multi-View Benefits:\n• Higher quality 3D models\n• Better detail reconstruction\n• More accurate proportions\n\n🎮 Dual Preview:\n• Main: Large view with auto-rotate\n• Detail: Wireframe mode for geometry inspection\n\n💰 Get Credits: hitem3d.ai/?sp_source=Geekatplay"
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
+      ]
     }
   ],
   "links": [

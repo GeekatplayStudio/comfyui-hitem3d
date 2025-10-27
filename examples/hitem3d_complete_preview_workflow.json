@@ -1,6 +1,6 @@
 {
-  "last_node_id": 10,
-  "last_link_id": 15,
+  "last_node_id": 6,
+  "last_link_id": 5,
   "nodes": [
     {
       "id": 1,
@@ -39,9 +39,7 @@
       "widgets_values": [
         "example_image.jpg",
         "image"
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
+      ]
     },
     {
       "id": 2,
@@ -85,9 +83,7 @@
         2,
         1000000,
         600
-      ],
-      "color": "#2a363b",
-      "bgcolor": "#3f5159"
+      ]
     },
     {
       "id": 3,
@@ -125,11 +121,8 @@
         {
           "name": "status",
           "type": "STRING",
-          "links": [
-            6
-          ],
-          "shape": 3,
-          "slot_index": 1
+          "links": null,
+          "shape": 3
         }
       ],
       "properties": {
@@ -138,9 +131,7 @@
       "widgets_values": [
         "ComfyUI/output/hitem3d/",
         600
-      ],
-      "color": "#233",
-      "bgcolor": "#355"
+      ]
     },
     {
       "id": 4,
@@ -182,9 +173,7 @@
         true,
         false,
         true
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
+      ]
     },
     {
       "id": 5,
@@ -226,9 +215,7 @@
         false,
         true,
         false
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
+      ]
     },
     {
       "id": 6,
@@ -270,136 +257,7 @@
         true,
         false,
         true
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
-    },
-    {
-      "id": 7,
-      "type": "ShowText|pysssss",
-      "pos": [
-        850,
-        300
-      ],
-      "size": {
-        "0": 350,
-        "1": 140
-      },
-      "flags": {},
-      "order": 6,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "text",
-          "type": "STRING",
-          "link": 6,
-          "widget": {
-            "name": "text"
-          }
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "ShowText|pysssss"
-      },
-      "widgets_values": [
-        "",
-        "Status: Processing..."
-      ],
-      "color": "#322",
-      "bgcolor": "#533"
-    },
-    {
-      "id": 8,
-      "type": "HiTem3DConfigNode",
-      "pos": [
-        50,
-        400
-      ],
-      "size": {
-        "0": 315,
-        "1": 150
-      },
-      "flags": {},
-      "order": 7,
-      "mode": 0,
-      "outputs": [
-        {
-          "name": "config_status",
-          "type": "STRING",
-          "links": [
-            7
-          ],
-          "shape": 3
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "HiTem3DConfigNode"
-      },
-      "widgets_values": [
-        "YOUR_ACCESS_KEY_HERE",
-        "YOUR_SECRET_KEY_HERE",
-        "https://api.hitem3d.ai",
-        true
-      ],
-      "color": "#233",
-      "bgcolor": "#355"
-    },
-    {
-      "id": 9,
-      "type": "ShowText|pysssss",
-      "pos": [
-        400,
-        680
-      ],
-      "size": {
-        "0": 400,
-        "1": 140
-      },
-      "flags": {},
-      "order": 8,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "text",
-          "type": "STRING",
-          "link": 7,
-          "widget": {
-            "name": "text"
-          }
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "ShowText|pysssss"
-      },
-      "widgets_values": [
-        "",
-        "Config: Ready"
-      ],
-      "color": "#322",
-      "bgcolor": "#533"
-    },
-    {
-      "id": 10,
-      "type": "Note|pysssss",
-      "pos": [
-        50,
-        600
-      ],
-      "size": {
-        "0": 300,
-        "1": 220
-      },
-      "flags": {},
-      "order": 9,
-      "mode": 0,
-      "properties": {
-        "text": "🎯 HiTem3D Complete Workflow with 3D Preview\n\nCreated by: Geekatplay Studio by Vladimir Chopine\nWebsite: www.geekatplay.com\n\n🎮 Multiple Preview Modes:\n• Main Preview: Large view with auto-rotate\n• Wireframe View: Black background, wireframe mode\n• Clean View: White background, compact size\n\n🔧 Setup:\n1. Configure API keys in Config Node\n2. Load your image\n3. Run workflow\n4. Enjoy interactive 3D previews!\n\n💰 Get Credits: hitem3d.ai/?sp_source=Geekatplay"
-      },
-      "widgets_values": [
-        "🎯 HiTem3D Complete Workflow with 3D Preview\n\nCreated by: Geekatplay Studio by Vladimir Chopine\nWebsite: www.geekatplay.com\n\n🎮 Multiple Preview Modes:\n• Main Preview: Large view with auto-rotate\n• Wireframe View: Black background, wireframe mode\n• Clean View: White background, compact size\n\n🔧 Setup:\n1. Configure API keys in Config Node\n2. Load your image\n3. Run workflow\n4. Enjoy interactive 3D previews!\n\n💰 Get Credits: hitem3d.ai/?sp_source=Geekatplay"
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
+      ]
     }
   ],
   "links": [
@@ -442,22 +300,6 @@
       6,
       0,
       "STRING"
-    ],
-    [
-      6,
-      3,
-      1,
-      7,
-      0,
-      "STRING"
-    ],
-    [
-      7,
-      8,
-      0,
-      9,
-      0,
-      "STRING"
     ]
   ],
   "groups": [
@@ -482,18 +324,6 @@
         680
       ],
       "color": "#a1309b",
-      "font_size": 24,
-      "locked": false
-    },
-    {
-      "title": "📊 Status & Info",
-      "bounding": [
-        20,
-        690,
-        1180,
-        170
-      ],
-      "color": "#88a",
       "font_size": 24,
       "locked": false
     }
