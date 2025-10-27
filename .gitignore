@@ -13,6 +13,7 @@ local_config.json
 *.key
 *.secret
 *credentials*
+config.json
 
 # User Generated Content
 output/

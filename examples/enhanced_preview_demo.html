@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HiTem3D Model Preview - Enhanced Demo</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 600px;
+            max-width: 90vw;
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: slideInUp 0.8s ease-out;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+        
+        .file-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .file-stat {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(37, 99, 235, 0.05) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .file-stat::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+        }
+        
+        .file-stat .icon {
+            font-size: 24px;
+            margin-bottom: 12px;
+            display: block;
+        }
+        
+        .file-stat .value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 4px;
+        }
+        
+        .file-stat .label {
+            font-size: 12px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .actions-section {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .actions-title {
+            color: #10b981;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
+        }
+        
+        .action-btn {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            border: none;
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-height: 56px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(245, 158, 11, 0.4);
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        }
+        
+        .action-btn:hover::before {
+            left: 100%;
+        }
+        
+        .action-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .insight-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.05) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 16px;
+            padding: 25px;
+            position: relative;
+        }
+        
+        .insight-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #10b981, #06b6d4);
+        }
+        
+        .insight-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: #10b981;
+            font-weight: 600;
+            font-size: 18px;
+        }
+        
+        .insight-content {
+            color: #cbd5e1;
+            line-height: 1.7;
+            font-size: 15px;
+        }
+        
+        .footer {
+            background: rgba(15, 23, 42, 0.8);
+            padding: 20px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+        }
+        
+        .footer a {
+            color: #f59e0b;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .footer a:hover {
+            color: #fbbf24;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            z-index: 1000;
+            animation: slideInRight 0.3s ease-out;
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .notification.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                width: 100%;
+                margin: 10px;
+            }
+            
+            .file-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 HiTem3D Model Preview</h1>
+            <p class="subtitle">Next-Gen 3D Model Management</p>
+        </div>
+        
+        <div class="content">
+            <div class="status-badge">
+                ✅ Ready for Professional Use
+            </div>
+            
+            <div class="file-grid">
+                <div class="file-stat">
+                    <span class="icon">📄</span>
+                    <div class="value">model_demo.stl</div>
+                    <div class="label">File Name</div>
+                </div>
+                
+                <div class="file-stat">
+                    <span class="icon">🏷️</span>
+                    <div class="value">STL</div>
+                    <div class="label">Format</div>
+                </div>
+                
+                <div class="file-stat">
+                    <span class="icon">📏</span>
+                    <div class="value">2.5MB</div>
+                    <div class="label">File Size</div>
+                </div>
+                
+                <div class="file-stat">
+                    <span class="icon">⚡</span>
+                    <div class="value">Optimized</div>
+                    <div class="label">Status</div>
+                </div>
+            </div>
+            
+            <div class="actions-section">
+                <h3 class="actions-title">
+                    🚀 Professional Tools
+                </h3>
+                
+                <div class="actions-grid">
+                    <button class="action-btn" onclick="openInBlender()">
+                        🔷 Blender
+                    </button>
+                    
+                    <button class="action-btn" onclick="openInMeshLab()">
+                        🔶 MeshLab
+                    </button>
+                    
+                    <button class="action-btn" onclick="openIn3DViewer()">
+                        👁️ 3D Viewer
+                    </button>
+                    
+                    <button class="action-btn" onclick="copyPath()">
+                        📋 Copy Path
+                    </button>
+                    
+                    <button class="action-btn" onclick="openFolder()">
+                        📁 Show Folder
+                    </button>
+                    
+                    <button class="action-btn" onclick="showAdvancedInfo()">
+                        ℹ️ Details
+                    </button>
+                </div>
+            </div>
+            
+            <div class="insight-card">
+                <div class="insight-header">
+                    💡 AI-Powered Insights
+                </div>
+                <div class="insight-content">
+                    This 2.50 MB 3D model is perfectly optimized for professional workflows. 
+                    The file size offers an excellent balance between detail preservation and performance. 
+                    Recommended for high-quality rendering, 3D printing, and advanced editing in professional software.
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            Powered by <a href="https://www.hitem3d.ai" target="_blank">HiTem3D AI</a> | 
+            Created with ❤️ by <a href="https://www.geekatplay.com" target="_blank">Geekatplay Studio</a>
+        </div>
+    </div>
+    
+    <div id="notification" class="notification">
+        <div id="notification-title" style="font-weight: 600; margin-bottom: 8px; color: #f59e0b;"></div>
+        <div id="notification-content" style="white-space: pre-line; font-size: 14px; line-height: 1.5;"></div>
+        <button onclick="hideNotification()" style="position: absolute; top: 8px; right: 8px; background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 18px;">×</button>
+    </div>
+    
+    <script>
+        const modelPath = 'D:\\ComfyUI\\0.3.66\\ComfyUI\\output\\hitem3d\\model_demo.stl';
+        const fileInfo = {
+            name: 'model_demo.stl',
+            format: 'STL',
+            size: '2.50 MB',
+            path: modelPath
+        };
+        
+        function openInBlender() {
+            showNotification('🔷 Blender Setup', 
+                `Professional 3D Creation Suite\n\n` +
+                `1. Launch Blender\n` +
+                `2. File → Import → STL\n` +
+                `3. Navigate to model file\n` +
+                `4. Adjust import settings if needed\n\n` +
+                `💡 Tip: Enable STL import in Add-ons if not visible`
+            );
+        }
+        
+        function openInMeshLab() {
+            showNotification('🔶 MeshLab Analysis',
+                `Advanced Mesh Processing Tool\n\n` +
+                `1. Launch MeshLab\n` +
+                `2. File → Import Mesh\n` +
+                `3. Select your model file\n` +
+                `4. Use Filters menu for analysis\n\n` +
+                `💡 Perfect for mesh repair and optimization`
+            );
+        }
+        
+        function openIn3DViewer() {
+            showNotification('👁️ Quick Preview',
+                `Windows Built-in 3D Viewer\n\n` +
+                `Method 1: Right-click file → Open with → 3D Viewer\n` +
+                `Method 2: Drag file to 3D Viewer app\n` +
+                `Method 3: Double-click if set as default\n\n` +
+                `💡 Great for quick inspection and measurements`
+            );
+        }
+        
+        function copyPath() {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(modelPath).then(() => {
+                    showNotification('📋 Copied Successfully', 
+                        `File path copied to clipboard!\n\n` +
+                        `You can now paste it in:\n` +
+                        `• File explorers\n` +
+                        `• Application open dialogs\n` +
+                        `• Command line tools\n` +
+                        `• Documentation or notes`,
+                        'success'
+                    );
+                }).catch(() => {
+                    fallbackCopyPath();
+                });
+            } else {
+                fallbackCopyPath();
+            }
+        }
+        
+        function fallbackCopyPath() {
+            const textArea = document.createElement('textarea');
+            textArea.value = modelPath;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showNotification('📋 Copied Successfully', 'File path copied to clipboard!', 'success');
+            } catch (err) {
+                prompt('Copy this path manually:', modelPath);
+            }
+            document.body.removeChild(textArea);
+        }
+        
+        function openFolder() {
+            const folderPath = modelPath.replace(/[^\\]*$/, '');
+            showNotification('📁 Folder Access',
+                `Navigate to Model Directory\n\n` +
+                `Option 1: Press Win+R, then paste:\n${folderPath}\n\n` +
+                `Option 2: Open Windows Explorer and navigate to:\n${folderPath}\n\n` +
+                `Option 3: Copy path above and paste in Explorer address bar`
+            );
+        }
+        
+        function showAdvancedInfo() {
+            showNotification('ℹ️ Advanced File Information',
+                `📊 Complete Model Analysis\n\n` +
+                `File Name: ${fileInfo.name}\n` +
+                `Format: ${fileInfo.format} (STereoLithography)\n` +
+                `Size: ${fileInfo.size}\n` +
+                `Category: Medium-size professional model\n\n` +
+                `🎯 Optimization Level: Excellent\n` +
+                `💼 Use Cases: Professional editing, 3D printing\n` +
+                `⚡ Performance: Balanced detail/speed ratio\n` +
+                `🔧 Recommended RAM: 8GB+ for smooth editing`
+            );
+        }
+        
+        function showNotification(title, message, type = 'info') {
+            const notification = document.getElementById('notification');
+            const titleEl = document.getElementById('notification-title');
+            const contentEl = document.getElementById('notification-content');
+            
+            titleEl.textContent = title;
+            contentEl.textContent = message;
+            
+            notification.classList.add('show');
+            
+            // Auto-hide after 6 seconds
+            setTimeout(() => {
+                hideNotification();
+            }, 6000);
+        }
+        
+        function hideNotification() {
+            const notification = document.getElementById('notification');
+            notification.classList.remove('show');
+        }
+        
+        // Add subtle animations on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const stats = document.querySelectorAll('.file-stat');
+            const buttons = document.querySelectorAll('.action-btn');
+            
+            stats.forEach((stat, index) => {
+                stat.style.animationDelay = `${index * 0.1}s`;
+                stat.style.animation = 'slideInUp 0.6s ease-out forwards';
+            });
+            
+            buttons.forEach((btn, index) => {
+                btn.style.animationDelay = `${0.5 + index * 0.05}s`;
+                btn.style.animation = 'slideInUp 0.6s ease-out forwards';
+            });
+        });
+        
+        // Add welcome message
+        setTimeout(() => {
+            showNotification('🎯 Welcome to HiTem3D Preview', 
+                `Your 3D model is ready for professional use!\n\n` +
+                `✨ Click any action button above to get started\n` +
+                `🚀 This preview is optimized for your 2.5MB model\n` +
+                `💼 Perfect for professional 3D workflows`,
+                'welcome'
+            );
+        }, 1000);
+    </script>
+</body>
+</html>

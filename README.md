@@ -1,6 +1,6 @@
 # ComfyUI HiTem3D Integration
 
-A custom ComfyUI node that integrates with the HiTem3D API to generate high-quality 3D models from images.
+A comprehensive ComfyUI node collection that integrates with the HiTem3D API to generate high-quality 3D models from images, featuring advanced HTML preview capabilities and dynamic content generation.
 
 **Created by:** Geekatplay Studio by Vladimir Chopine  
 **Website:** [www.geekatplay.com](https://www.geekatplay.com)  
@@ -10,6 +10,30 @@ A custom ComfyUI node that integrates with the HiTem3D API to generate high-qual
 ## 💰 Get HiTem3D Credits
 **Special Referral Link:** [https://www.hitem3d.ai/?sp_source=Geekatplay](https://www.hitem3d.ai/?sp_source=Geekatplay)  
 Use this link to sign up and get credits for HiTem3D API usage!
+
+## 🎯 New Features
+
+### 🌐 HTML Previewer System
+- **Live HTML Preview** in ComfyUI with floating panel interface
+- **Auto-refresh functionality** with dynamic tokens
+- **Secure file serving** with path validation
+- **Interactive controls** with drag & drop support
+
+### 🔄 Dynamic Value Generation
+- **Dynamic Value Generator** - Create timestamps, counters, UUIDs, random values
+- **Text Template System** - Process templates with dynamic placeholders
+- **Auto-refresh Tokens** - Trigger HTML preview updates automatically
+
+### 📊 Complete Node Collection
+- **7 specialized nodes** for 3D generation and HTML preview
+- **Professional 3D Preview** with interactive controls
+- **Flexible workflow examples** for all use cases
+
+## 📁 Examples & Workflows
+Check out the **`examples/`** folder for:
+- `hitem3d_basic_workflow.json` - Basic 3D generation workflow
+- `html_previewer_workflow.json` - HTML preview with auto-refresh
+- Complete integration examples and documentation
 
 ## 🚀 Quick Start
 
@@ -32,118 +56,18 @@ Use this link to sign up and get credits for HiTem3D API usage!
 
 📖 **Detailed Setup:** See `QUICK_SETUP.md`
 
-## Features
+## 🔧 Node Collection
 
-- **Image to 3D Generation**: Convert single images to 3D models
-- **Multi-view Support**: Use front, back, left, and right images for better results
-- **Multiple Output Formats**: Support for OBJ, GLB, STL, and FBX formats
-- **🆕 Interactive 3D Preview**: View generated models directly in ComfyUI with controls
-- **Flexible Generation Types**: Geometry-only, texture-only, or complete generation
-- **Multiple Model Versions**: Support for v1.0, v1.5, and portrait-specific models
-- **Configurable Parameters**: Resolution, face count, and other generation parameters
-- **Professional Setup Wizard**: Easy configuration for new users
+### Core 3D Generation Nodes
 
-## Installation
-
-1. The custom node is already installed in your ComfyUI directory:
-   ```
-   ComfyUI/custom_nodes/comfyui-hitem3d/
-   ```
-
-2. Install the required dependencies using one of these methods:
-
-   **Method 1 - PowerShell (Recommended):**
-   ```powershell
-   cd "ComfyUI/custom_nodes/comfyui-hitem3d"
-   & "../../python_embeded/python.exe" -m pip install -r requirements.txt
-   ```
-
-   **Method 2 - Use the installation script:**
-   ```powershell
-   cd "ComfyUI/custom_nodes/comfyui-hitem3d"
-   .\install_direct.bat
-   ```
-
-   **Method 3 - PowerShell script:**
-   ```powershell
-   cd "ComfyUI/custom_nodes/comfyui-hitem3d"
-   .\install.ps1
-   ```
-
-3. The configuration file `config.json` is already set up with your API credentials.
-
-4. Restart ComfyUI
-
-## API Credentials
-
-To use this node, you need HiTem3D API credentials:
-
-1. **Get Credits:** Visit [https://www.hitem3d.ai/?sp_source=Geekatplay](https://www.hitem3d.ai/?sp_source=Geekatplay) to sign up with referral code
-2. **Purchase a resource package** (required for generating 3D models)
-3. Create an API key in the developer console
-4. Use the Access Key and Secret Key in the configuration
-
-### Initial Setup Required
-
-**⚠️ IMPORTANT: You need to configure your personal API keys before using this node!**
-
-1. **Get Your API Keys:**
-   - Visit [https://www.hitem3d.ai/?sp_source=Geekatplay](https://www.hitem3d.ai/?sp_source=Geekatplay)
-   - Register/Login to your account
-   - Navigate to the API/Developer section
-   - Generate your personal Access Key and Secret Key
-
-2. **Configure the Node:**
-   - Run the setup wizard: `python setup_wizard.py`
-   - Or manually edit `config.json` with your keys
-   - Or use the `HiTem3DConfigNode` in ComfyUI
-
-### ⚠️ Important: Account Balance Required
-
-**Your API credentials are valid, but you need to add credits to your account to generate 3D models.**
-
-If you see errors like "余额不足" or "Insufficient balance":
-1. Visit [https://www.hitem3d.ai/?sp_source=Geekatplay](https://www.hitem3d.ai/?sp_source=Geekatplay)
-2. Log into your account
-3. Purchase a resource package to add credits
-4. Each 3D generation consumes credits based on resolution and complexity
-
-### Test Your Account Status
-```powershell
-cd "ComfyUI/custom_nodes/comfyui-hitem3d"
-& "../../python_embeded/python.exe" check_balance.py
-```
-
-## Usage
-
-### Quick Start with Example Workflows
-
-The easiest way to get started is to use the provided example workflows:
-
-1. **Navigate to the examples directory**: `examples/`
-2. **Choose a workflow**:
-   - `hitem3d_simple_workflow.json` - Basic single image to 3D
-   - `hitem3d_multiview_workflow.json` - Multi-view to 3D  
-   - `hitem3d_config_workflow.json` - Configure API credentials
-3. **Load the workflow** in ComfyUI (drag and drop the JSON file)
-4. **Add your images** to ComfyUI's input folder
-5. **Run the workflow**
-
-See `examples/README.md` for detailed instructions.
-
-### Manual Node Setup
-
-### HiTem3D Generator Node
-
-The main node for generating 3D models:
+#### HiTem3D Generator Node
+Converts images to 3D models using HiTem3D API.
 
 **Required Inputs:**
 - `front_image`: The front view image (required)
 
 **Optional Inputs:**
-- `back_image`: Back view image (optional)
-- `left_image`: Left side view image (optional) 
-- `right_image`: Right side view image (optional)
+- `back_image`, `left_image`, `right_image`: Additional view images
 - `model`: Model version (`hitem3dv1`, `hitem3dv1.5`, `scene-portraitv1.5`)
 - `resolution`: Output resolution (`512`, `1024`, `1536`, `1536pro`)
 - `output_format`: File format (`obj`, `glb`, `stl`, `fbx`)
@@ -156,21 +80,19 @@ The main node for generating 3D models:
 - `cover_url`: URL to download the preview image
 - `task_id`: Unique task identifier
 
-### HiTem3D Downloader Node
-
-Downloads 3D models from HiTem3D URLs:
+#### HiTem3D Downloader Node
+Downloads 3D models from HiTem3D URLs.
 
 **Inputs:**
 - `model_url`: URL from the Generator node
-- `filename`: Base filename for the downloaded model
-- `output_directory`: Directory to save the model (optional)
+- `file_name`: Base filename for the downloaded model
 
 **Outputs:**
-- `file_path`: Local path to the downloaded model file
+- `model_path`: Local path to the downloaded model file
+- `status`: Download status message
 
-### HiTem3D Config Node
-
-Updates API configuration:
+#### HiTem3D Config Node
+Updates API configuration.
 
 **Inputs:**
 - `access_key`: Your HiTem3D access key
@@ -178,51 +100,142 @@ Updates API configuration:
 - `api_base_url`: API base URL (optional)
 - `save_config`: Whether to save configuration to file
 
-### HiTem3D 3D Preview Node 🆕
-
-Interactive 3D model viewer for generated models:
+#### HiTem3D 3D Preview Node
+Interactive 3D model viewer for generated models.
 
 **Inputs:**
-- `model_path`: Path to the 3D model file (from Downloader node)
-- `width`: Preview window width (256-2048, default: 512)
-- `height`: Preview window height (256-2048, default: 512)
-- `background_color`: Background color (#000000, #FFFFFF, #808080, #404040)
-- `auto_rotate`: Enable automatic rotation (default: true)
-- `show_wireframe`: Show model in wireframe mode (default: false)
-- `show_grid`: Display reference grid (default: true)
+- `model_path`: Path to the 3D model file
+- `width`, `height`: Preview window dimensions
+- `background_color`: Background color
+- `auto_rotate`: Enable automatic rotation
+- `show_wireframe`: Show model in wireframe mode
+- `show_grid`: Display reference grid
 
 **Outputs:**
 - `preview_html`: HTML preview of the 3D model
+- `preview_file_path`: Path to saved preview file
+- `preview_url`: URL for opening preview
 
-**Features:**
-- 🔄 Interactive rotation, zoom, and pan with mouse
-- 🎨 Multiple background color options
-- 🔍 Wireframe mode toggle
-- 📐 Reference grid display
-- 📊 Vertex and face count display
-- ⚡ Auto-rotation mode
-- 🎮 Camera reset controls
+### HTML Preview System Nodes
 
-**Supported Formats:**
-- **GLB/GLTF**: Full support with materials and animations
-- **OBJ**: Solid model with basic material
-- **STL**: Solid model for 3D printing preview
-- **FBX**: Basic support (experimental)
+#### HTML Previewer (Local)
+Displays HTML content in ComfyUI with live preview panel.
 
-**Usage:**
-Connect the `model_path` output from `HiTem3DDownloaderNode` to preview generated models instantly!
+**Inputs:**
+- `html_content`: HTML content to display
+- `auto_refresh_token`: Token for triggering auto-refresh
 
 **Outputs:**
-- `status`: Configuration update status message
+- `preview_url`: URL for accessing the HTML preview
 
-## Workflow Example
+**Features:**
+- 🎯 **Floating Preview Panel** - Draggable interface
+- 🔄 **Auto-refresh Detection** - Automatically detects when to refresh
+- 🛡️ **Secure File Serving** - Safe path validation
+- 🎮 **Interactive Controls** - Toolbar with refresh and settings
 
-1. **Load Image**: Use ComfyUI's Load Image node to load your front view image
-2. **Optional**: Load additional images for back, left, and right views
-3. **HiTem3D Generator**: Connect your images to the HiTem3D Generator node
-4. **Configure Parameters**: Set your desired model version, resolution, and format
-5. **Generate**: Run the workflow to create your 3D model
-6. **Download**: Use the HiTem3D Downloader node to save the model locally
+#### Dynamic Value Generator
+Generates dynamic values for auto-refresh and templating.
+
+**Inputs:**
+- `value_type`: Type of value (`timestamp`, `counter`, `uuid`, `random`, `custom`)
+- `custom_prefix`: Optional prefix for generated values
+- `counter_start`: Starting value for counter mode
+- `format_string`: Timestamp format string
+
+**Outputs:**
+- `dynamic_value`: Generated dynamic value
+
+**Value Types:**
+- **Timestamp**: Current date/time in configurable format
+- **Counter**: Incremental counter with custom starting value
+- **UUID**: Unique identifier (8-character short form)
+- **Random**: Random number (1000-9999)
+- **Custom**: Unix timestamp with custom prefix
+
+#### Text Template
+Processes text templates with dynamic placeholders.
+
+**Inputs:**
+- `template`: Text template with `{{placeholder}}` syntax
+- `value1`, `value2`, `value3`: Dynamic values for template
+- `timestamp_format`: Format for built-in timestamp placeholders
+
+**Outputs:**
+- `text_output`: Processed template with values replaced
+
+**Built-in Placeholders:**
+- `{{timestamp}}` - Current timestamp
+- `{{date}}` - Current date
+- `{{unix}}` - Unix timestamp
+- `{{year}}`, `{{month}}`, `{{day}}` - Date components
+- `{{hour}}`, `{{minute}}`, `{{second}}` - Time components
+- `{{value1}}`, `{{value2}}`, `{{value3}}` - Input values
+
+## Installation
+
+The node collection is already installed in your ComfyUI directory:
+```
+ComfyUI/custom_nodes/comfyui-hitem3d/
+```
+
+Install dependencies using one of these methods:
+
+**Method 1 - Direct Installation (Recommended):**
+```powershell
+cd "ComfyUI/custom_nodes/comfyui-hitem3d"
+.\install_direct.bat
+```
+
+**Method 2 - PowerShell Script:**
+```powershell
+cd "ComfyUI/custom_nodes/comfyui-hitem3d"
+.\install.ps1
+```
+
+**Method 3 - Manual Installation:**
+```powershell
+cd "ComfyUI/custom_nodes/comfyui-hitem3d"
+& "../../python_embeded/python.exe" -m pip install -r requirements.txt
+```
+
+## Configuration
+
+### Initial Setup Required
+
+**⚠️ IMPORTANT: Configure your personal API keys before using this node!**
+
+1. **Get Your API Keys:**
+   - Visit [https://www.hitem3d.ai/?sp_source=Geekatplay](https://www.hitem3d.ai/?sp_source=Geekatplay)
+   - Register/Login to your account
+   - Navigate to the API/Developer section
+   - Generate your personal Access Key and Secret Key
+
+2. **Configure the Node:**
+   - Run the setup wizard: `python setup_wizard.py`
+   - Or manually edit `config.json` with your keys
+   - Or use the `HiTem3DConfigNode` in ComfyUI
+
+3. **Add Credits:**
+   - Purchase a resource package at [HiTem3D](https://www.hitem3d.ai/?sp_source=Geekatplay)
+   - Each 3D generation consumes credits based on resolution and complexity
+
+## Usage Examples
+
+### Basic 3D Generation Workflow
+
+1. **Load Image**: Use ComfyUI's Load Image node
+2. **Configure API**: Use HiTem3DConfigNode with your credentials
+3. **Generate 3D**: Connect image to HiTem3DNode
+4. **Download Model**: Use HiTem3DDownloaderNode
+5. **Preview**: Use HiTem3DPreviewNode for interactive 3D preview
+
+### HTML Preview Workflow
+
+1. **Generate Content**: Create HTML content (from 3D preview or custom)
+2. **Add Auto-refresh**: Use DynamicValueGenerator for refresh tokens
+3. **Process Template**: Use TextTemplate for dynamic content
+4. **Preview HTML**: Use HTMLPreviewer for live preview in ComfyUI
 
 ## Supported Parameters
 
@@ -232,9 +245,9 @@ Connect the `model_path` output from `HiTem3DDownloaderNode` to preview generate
 - `scene-portraitv1.5`: Specialized for portrait/character models
 
 ### Resolutions
-- `512`: 512³ resolution
+- `512`: 512³ resolution (fastest)
 - `1024`: 1024³ resolution (recommended)
-- `1536`: 1536³ resolution
+- `1536`: 1536³ resolution (high quality)
 - `1536pro`: 1536³ Pro resolution (highest quality)
 
 ### Output Formats
@@ -245,17 +258,8 @@ Connect the `model_path` output from `HiTem3DDownloaderNode` to preview generate
 
 ### Generation Types
 - `geometry_only`: Generate only the mesh geometry
-- `texture_only`: Generate textures for existing geometry (requires mesh_url)
+- `texture_only`: Generate textures for existing geometry
 - `both`: Generate both geometry and textures (recommended)
-
-## Troubleshooting
-
-### Common Issues
-
-1. **"Config file not found"**: Ensure `config.json` exists in the node directory
-2. **"Invalid credentials"**: Check your access key and secret key
-3. **"Task timeout"**: Increase the timeout value or check API status
-4. **"Insufficient balance"**: Contact HiTem3D support to add credits
 
 ## Troubleshooting
 
@@ -263,17 +267,18 @@ Connect the `model_path` output from `HiTem3DDownloaderNode` to preview generate
 
 1. **"Insufficient balance" (余额不足)**: Your account needs more credits
    - Visit [https://www.hitem3d.ai/?sp_source=Geekatplay](https://www.hitem3d.ai/?sp_source=Geekatplay) to purchase credits
-   - Run `check_balance.py` to verify your account status
 
-2. **"Invalid credentials"**: Check your access key and secret key
+2. **"Invalid credentials"**: Check your access key and secret key in config
+
 3. **"Task timeout"**: Increase the timeout value or try lower resolution
-4. **"Upload file size exceeds limit"**: Ensure images are under 20MB
 
-### Troubleshooting Tools
+4. **"Some Nodes Are Missing"**: 
+   - Restart ComfyUI completely to reload node definitions
+   - Check that all dependencies are installed correctly
 
-- **Balance Checker**: `check_balance.py` - Verify account and credentials
-- **Troubleshooting Guide**: `TROUBLESHOOTING.md` - Comprehensive error solutions
-- **Example Workflows**: `examples/` - Ready-to-use workflows for testing
+5. **HTML Previewer not working**:
+   - Ensure server imports are available
+   - Check that no other process is using the same port
 
 For detailed troubleshooting, see `TROUBLESHOOTING.md`.
 
@@ -284,13 +289,12 @@ For detailed troubleshooting, see `TROUBLESHOOTING.md`.
 - Supported formats: PNG, JPEG, JPG, WebP
 - Face count range: 100,000 - 2,000,000
 
-### Logging
+## Documentation
 
-The node provides detailed logging information. Check the ComfyUI console for:
-- Task creation status
-- Generation progress
-- Download status
-- Error messages
+- `HTML_PREVIEWER_README.md` - Detailed HTML preview system guide
+- `QUICK_SETUP.md` - Quick setup instructions
+- `TROUBLESHOOTING.md` - Comprehensive troubleshooting guide
+- `examples/README.md` - Example workflows and usage patterns
 
 ## API Reference
 
@@ -308,7 +312,7 @@ For issues related to:
 
 ## Support Geekatplay Studio
 
-If you find this node useful, please consider supporting:
+If you find this node collection useful, please consider supporting:
 - **Patreon:** [https://www.patreon.com/c/geekatplay](https://www.patreon.com/c/geekatplay)
 - **YouTube:** [@geekatplay](https://www.youtube.com/@geekatplay) and [@geekatplay-ru](https://www.youtube.com/@geekatplay-ru)
 - **Website:** [www.geekatplay.com](https://www.geekatplay.com)
@@ -318,6 +322,13 @@ If you find this node useful, please consider supporting:
 This project is created by Geekatplay Studio by Vladimir Chopine for integration with the HiTem3D API service.
 
 ## Version History
+
+- **v2.0.0**: Complete HTML Preview System
+  - Added HTML Previewer with live preview panel
+  - Dynamic Value Generator for auto-refresh functionality
+  - Text Template system with placeholder processing
+  - Enhanced 3D Preview with interactive controls
+  - Cleaned project structure and comprehensive documentation
 
 - **v1.0.0**: Initial release with full HiTem3D API integration
   - Single and multi-view image support

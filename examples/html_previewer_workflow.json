@@ -1,0 +1,167 @@
+{
+  "last_node_id": 8,
+  "last_link_id": 10,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "HiTem3DConfigNode",
+      "pos": [50, 100],
+      "size": {"0": 320, "1": 200},
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "outputs": [
+        {"name": "config", "type": "CONFIG", "links": [1], "shape": 3}
+      ],
+      "properties": {},
+      "widgets_values": ["", "", "900", "7200"]
+    },
+    {
+      "id": 2,
+      "type": "HiTem3DNode",
+      "pos": [400, 50],
+      "size": {"0": 350, "1": 300},
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {"name": "image", "type": "IMAGE", "link": 2},
+        {"name": "config", "type": "CONFIG", "link": 1}
+      ],
+      "outputs": [
+        {"name": "task_id", "type": "STRING", "links": [3], "shape": 3}
+      ],
+      "properties": {},
+      "widgets_values": ["", "medium", "standard", "", "", "", ""]
+    },
+    {
+      "id": 3,
+      "type": "LoadImage",
+      "pos": [50, 350],
+      "size": {"0": 315, "1": 314},
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "outputs": [
+        {"name": "IMAGE", "type": "IMAGE", "links": [2], "shape": 3},
+        {"name": "MASK", "type": "MASK", "links": null, "shape": 3}
+      ],
+      "properties": {},
+      "widgets_values": ["sample_image.jpg", "image"]
+    },
+    {
+      "id": 4,
+      "type": "HiTem3DDownloaderNode",
+      "pos": [800, 50],
+      "size": {"0": 350, "1": 250},
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {"name": "task_id", "type": "STRING", "link": 3},
+        {"name": "config", "type": "CONFIG", "link": 4}
+      ],
+      "outputs": [
+        {"name": "model_path", "type": "STRING", "links": [5], "shape": 3},
+        {"name": "status", "type": "STRING", "links": [6], "shape": 3}
+      ],
+      "properties": {},
+      "widgets_values": ["", "300", ""]
+    },
+    {
+      "id": 5,
+      "type": "HiTem3DConfigNode",
+      "pos": [450, 400],
+      "size": {"0": 320, "1": 200},
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "outputs": [
+        {"name": "config", "type": "CONFIG", "links": [4], "shape": 3}
+      ],
+      "properties": {},
+      "widgets_values": ["", "", "900", "7200"]
+    },
+    {
+      "id": 6,
+      "type": "HiTem3DPreviewNode",
+      "pos": [1200, 50],
+      "size": {"0": 350, "1": 200},
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {"name": "model_path", "type": "STRING", "link": 5}
+      ],
+      "outputs": [
+        {"name": "preview_html", "type": "STRING", "links": [7], "shape": 3},
+        {"name": "preview_file_path", "type": "STRING", "links": [8], "shape": 3},
+        {"name": "preview_url", "type": "STRING", "links": [9], "shape": 3}
+      ],
+      "properties": {},
+      "widgets_values": []
+    },
+    {
+      "id": 7,
+      "type": "HTMLPreviewer",
+      "pos": [1600, 50],
+      "size": {"0": 400, "1": 350},
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {"name": "html_content", "type": "STRING", "link": 7},
+        {"name": "auto_refresh_token", "type": "STRING", "link": 10}
+      ],
+      "outputs": [
+        {"name": "preview_url", "type": "STRING", "links": [], "shape": 3}
+      ],
+      "properties": {},
+      "widgets_values": ["", "", "", "", ""]
+    },
+    {
+      "id": 8,
+      "type": "DynamicValueGenerator",
+      "pos": [1200, 300],
+      "size": {"0": 350, "1": 200},
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "outputs": [
+        {"name": "dynamic_value", "type": "STRING", "links": [10], "shape": 3}
+      ],
+      "title": "🔄 Auto-Refresh Timer",
+      "properties": {},
+      "widgets_values": ["timestamp", "refresh_", 1, "%Y%m%d_%H%M%S"]
+    }
+  ],
+  "links": [
+    [1, 1, 0, 2, 1, "CONFIG"],
+    [2, 3, 0, 2, 0, "IMAGE"],
+    [3, 2, 0, 4, 0, "STRING"],
+    [4, 5, 0, 4, 1, "CONFIG"],
+    [5, 4, 0, 6, 0, "STRING"],
+    [6, 4, 1, 6, 1, "STRING"],
+    [7, 6, 0, 7, 0, "STRING"],
+    [8, 6, 1, 7, 1, "STRING"],
+    [9, 6, 2, 7, 2, "STRING"],
+    [10, 8, 0, 7, 1, "STRING"]
+  ],
+  "groups": [
+    {
+      "title": "HiTem3D Generation Pipeline",
+      "bounding": [30, 20, 1150, 680],
+      "color": "#3f789e",
+      "font_size": 24
+    },
+    {
+      "title": "HTML Preview System",
+      "bounding": [1180, 20, 1250, 400],
+      "color": "#a1309b",
+      "font_size": 24
+    }
+  ],
+  "config": {},
+  "extra": {},
+  "version": 0.4
+}

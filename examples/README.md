@@ -1,63 +1,198 @@
-# HiTem3D Basic Workflow
+# HiTem3D Examples & Workflows
 
-This is a clean, simple workflow that demonstrates the complete HiTem3D pipeline.
+Complete collection of example workflows demonstrating the HiTem3D ComfyUI integration with HTML preview capabilities.
 
-## Workflow Structure
+## 📁 Available Examples
 
+### 🎯 Basic 3D Generation
+**File:** `hitem3d_basic_workflow.json`
+
+Complete workflow for converting images to 3D models:
 ```
-[Load Image] → [Generator] → [Downloader] → [Preview]
+[Load Image] → [Generator] → [Downloader] → [3D Preview]
      ↓             ↓            ↓           
 [Config Node] → [Text Outputs] ←→ [Text Outputs]
 ```
 
-## Nodes Included
+**Features:**
+- Image to 3D conversion
+- Interactive 3D preview
+- Download management
+- Status monitoring
 
-1. **LoadImage** - Load your front image for 3D generation
-2. **HiTem3DConfigNode** - Configure API credentials (runtime or persistent)
-3. **HiTem3DNode (Generator)** - Submit generation request and wait for completion
-4. **HiTem3DDownloaderNode** - Download the 3D model from the provided URL
-5. **HiTem3DPreviewNode** - Interactive 3D preview of the downloaded model
-6. **ShowText Nodes** - Display outputs for debugging:
-   - Model URL from Generator
-   - Cover URL from Generator  
-   - Task ID from Generator
+### 🌐 HTML Preview System  
+**File:** `html_previewer_workflow.json`
 
-## Data Flow
+Advanced workflow combining 3D generation with HTML preview:
+```
+[3D Generation Pipeline] → [HTML Preview] ← [Dynamic Values]
+                             ↓
+                      [Auto-Refresh System]
+```
 
-1. **Image Input**: Load your front image
-2. **Generation**: Generator processes image and waits for completion
-3. **Outputs**: Generator returns:
-   - `model_url` → Connected to Downloader
-   - `cover_url` → Displayed in text node
-   - `task_id` → Displayed in text node
-4. **Download**: Downloader takes model_url and downloads to local file
-5. **Preview**: Preview node shows interactive 3D model
+**Features:**
+- Live HTML preview in ComfyUI
+- Auto-refresh with dynamic tokens
+- Template processing with placeholders
+- Secure content serving
 
-## Configuration
+### 📄 Demo Content
+**File:** `enhanced_preview_demo.html`
 
-- **Generator Settings**: Model version, resolution, format, generation type, face count, timeout
-- **Downloader Settings**: File name prefix, output directory
-- **Preview Settings**: Display dimensions, controls, background color
+Sample HTML file for testing the HTML preview system with:
+- Interactive 3D model viewer
+- Modern responsive design
+- Dynamic content placeholders
+- Professional styling
 
-## Usage
+## 🚀 Quick Start Guide
 
-1. Load your front image in the LoadImage node
-2. Configure your API credentials in the Config node
-3. Adjust generation settings in the Generator node if needed
-4. Run the workflow
-5. View the 3D model in the Preview node
-6. Check the text outputs to see URLs and task information
+### 1. Basic 3D Generation
+1. Load `hitem3d_basic_workflow.json` in ComfyUI
+2. Configure API credentials in HiTem3DConfigNode
+3. Load your image in LoadImage node
+4. Run workflow and view results
 
-This workflow demonstrates the restored original design where the Generator handles waiting and returns URLs, while the Downloader simply downloads from the provided URL.
+### 2. HTML Preview Testing
+1. Load `html_previewer_workflow.json` in ComfyUI
+2. Run workflow to generate 3D content
+3. Click **🎯 HTML Preview** button in toolbar
+4. Watch auto-refresh as you re-run the workflow
 
-## Requirements
+## 🔧 Node Configuration
 
-- Valid HiTem3D API credentials (Access Key and Secret Key)
-- Input image in supported formats (JPEG, PNG)
-- Sufficient account credits for generation
-- ShowText|pysssss extension for text display nodes
+### Core Nodes Required
 
-## Created by Geekatplay Studio
+#### HiTem3D Generator Node
+- **Model**: `hitem3dv1.5` (recommended)
+- **Resolution**: `1024` (balanced quality/speed)
+- **Format**: `glb` (best compatibility)
+- **Generation Type**: `both` (geometry + textures)
+
+#### HTML Previewer (Local)
+- **HTML Content**: Connect from 3D Preview or Text Template
+- **Auto-refresh Token**: Connect from Dynamic Value Generator
+
+#### Dynamic Value Generator
+- **Value Type**: `timestamp` (for auto-refresh)
+- **Custom Prefix**: `refresh_` (optional)
+- **Format**: `%Y%m%d_%H%M%S` (timestamp format)
+
+#### Text Template
+- **Template**: HTML content with `{{placeholders}}`
+- **Values**: Dynamic content from other nodes
+
+## 📊 Workflow Components
+
+### Data Flow Example
+```mermaid
+graph TD
+    A[Load Image] --> B[HiTem3D Generator]
+    C[Config Node] --> B
+    B --> D[Downloader]
+    B --> E[3D Preview Node]
+    E --> F[HTML Previewer]
+    G[Dynamic Value Generator] --> H[Text Template]
+    H --> F
+    I[Auto-refresh Token] --> F
+```
+
+### Output Connections
+- **Model URL** → Downloader input
+- **HTML Content** → HTML Previewer input
+- **Dynamic Values** → Template processing
+- **Preview URLs** → Browser access
+
+## 🎮 Interactive Features
+
+### HTML Preview Panel
+- **Draggable Interface**: Move preview windows
+- **Auto-detection**: Finds HTML previewer nodes automatically
+- **Status Indicators**: Shows loading/ready states
+- **Refresh Controls**: Manual and automatic refresh
+
+### 3D Preview Controls
+- **Interactive Rotation**: Mouse control
+- **Zoom & Pan**: Scroll and drag
+- **Display Options**: Wireframe, grid, background
+- **File Info**: Vertex count, format details
+
+## 🔄 Auto-Refresh System
+
+### How It Works
+1. Dynamic Value Generator creates changing tokens
+2. Text Template processes HTML with dynamic content
+3. HTML Previewer detects token changes
+4. Preview refreshes automatically
+
+### Best Practices
+- Use timestamp tokens for time-based refresh
+- Use counter tokens for execution-based refresh
+- Include dynamic values in HTML templates
+- Test refresh behavior with different token types
+
+## 📚 Documentation Links
+
+- **Main README**: Complete feature overview
+- **HTML_PREVIEWER_README**: Detailed HTML system guide
+- **QUICK_SETUP**: Installation and configuration
+- **TROUBLESHOOTING**: Common issues and solutions
+
+## 🛠️ Requirements
+
+### Essential
+- Valid HiTem3D API credentials
+- ComfyUI with custom nodes support
+- Input images (JPEG, PNG, WebP)
+- Sufficient HiTem3D account credits
+
+### Optional Extensions
+- **ShowText|pysssss**: For text display nodes (used in basic workflow)
+- **Browser**: For external HTML preview access
+
+## 🎯 Use Cases
+
+### 3D Content Creation
+- Character modeling from photos
+- Product visualization
+- Architectural previews
+- Game asset generation
+
+### HTML Preview Applications
+- 3D model galleries
+- Interactive documentation
+- Real-time content updates
+- Dashboard creation
+
+## ⚠️ Important Notes
+
+### API Configuration
+- Configure API keys before first use
+- Use setup wizard: `setup_wizard.py`
+- Add credits to HiTem3D account
+- Test connection with basic workflow
+
+### File Management
+- Generated models saved to `output/hitem3d/`
+- HTML previews in `output/hitem3d/previews/`
+- Secure path validation enforced
+- Only `.html` and `.htm` files served
+
+## 🆘 Troubleshooting
+
+### Common Issues
+1. **Missing Nodes**: Restart ComfyUI after installation
+2. **API Errors**: Check credentials and account balance
+3. **Preview Not Loading**: Verify HTML content and file paths
+4. **Auto-refresh Not Working**: Check token connections
+
+### Getting Help
+- Check `TROUBLESHOOTING.md` for detailed solutions
+- Visit [www.geekatplay.com](https://www.geekatplay.com) for support
+- Review HiTem3D API documentation
+
+## 📝 Created by Geekatplay Studio
 
 **Website:** [www.geekatplay.com](https://www.geekatplay.com)  
+**YouTube:** [@geekatplay](https://www.youtube.com/@geekatplay)  
 **Get HiTem3D Credits:** [https://www.hitem3d.ai/?sp_source=Geekatplay](https://www.hitem3d.ai/?sp_source=Geekatplay)
