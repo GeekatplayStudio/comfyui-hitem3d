@@ -37,9 +37,11 @@ Use this link to sign up and get credits for HiTem3D API usage!
 - **Image to 3D Generation**: Convert single images to 3D models
 - **Multi-view Support**: Use front, back, left, and right images for better results
 - **Multiple Output Formats**: Support for OBJ, GLB, STL, and FBX formats
+- **🆕 Interactive 3D Preview**: View generated models directly in ComfyUI with controls
 - **Flexible Generation Types**: Geometry-only, texture-only, or complete generation
 - **Multiple Model Versions**: Support for v1.0, v1.5, and portrait-specific models
 - **Configurable Parameters**: Resolution, face count, and other generation parameters
+- **Professional Setup Wizard**: Easy configuration for new users
 
 ## Installation
 
@@ -175,6 +177,40 @@ Updates API configuration:
 - `secret_key`: Your HiTem3D secret key
 - `api_base_url`: API base URL (optional)
 - `save_config`: Whether to save configuration to file
+
+### HiTem3D 3D Preview Node 🆕
+
+Interactive 3D model viewer for generated models:
+
+**Inputs:**
+- `model_path`: Path to the 3D model file (from Downloader node)
+- `width`: Preview window width (256-2048, default: 512)
+- `height`: Preview window height (256-2048, default: 512)
+- `background_color`: Background color (#000000, #FFFFFF, #808080, #404040)
+- `auto_rotate`: Enable automatic rotation (default: true)
+- `show_wireframe`: Show model in wireframe mode (default: false)
+- `show_grid`: Display reference grid (default: true)
+
+**Outputs:**
+- `preview_html`: HTML preview of the 3D model
+
+**Features:**
+- 🔄 Interactive rotation, zoom, and pan with mouse
+- 🎨 Multiple background color options
+- 🔍 Wireframe mode toggle
+- 📐 Reference grid display
+- 📊 Vertex and face count display
+- ⚡ Auto-rotation mode
+- 🎮 Camera reset controls
+
+**Supported Formats:**
+- **GLB/GLTF**: Full support with materials and animations
+- **OBJ**: Solid model with basic material
+- **STL**: Solid model for 3D printing preview
+- **FBX**: Basic support (experimental)
+
+**Usage:**
+Connect the `model_path` output from `HiTem3DDownloaderNode` to preview generated models instantly!
 
 **Outputs:**
 - `status`: Configuration update status message

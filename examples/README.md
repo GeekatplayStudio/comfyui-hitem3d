@@ -21,20 +21,46 @@ This directory contains example workflows demonstrating how to use the HiTem3D c
 - HiTem3DNode: Generate 3D model from the image
 - HiTem3DDownloaderNode: Download the generated model
 
+### 2. `hitem3d_with_preview_workflow.json` - 3D Generation with Live Preview ⭐ NEW!
+**Purpose**: Generate a 3D model and preview it directly in ComfyUI with interactive 3D viewer.
+
+**Nodes Used**:
+- LoadImage: Load your input image
+- HiTem3DNode: Generate 3D model from the image
+- HiTem3DDownloaderNode: Download the generated model
+- **HiTem3DPreviewNode**: Interactive 3D model preview with controls
+
+**Preview Features**:
+- 🔄 Interactive rotation and zoom
+- 🎨 Multiple background colors
+- 🔍 Wireframe mode toggle
+- 📐 Grid display
+- 📊 Vertex and face count
+- ⚡ Auto-rotation mode
+- 🎮 Reset camera controls
+
+**Supported Formats for Preview**:
+- GLB/GLTF (recommended - best support)
+- OBJ (with basic material)
+- STL (solid models)
+- FBX (partial support)
+
+### 3. `hitem3d_multiview_workflow.json` - Advanced Multi-View Generation
+- Model: `hitem3dv1.5` (latest version)
 **How to Use**:
 1. Load this workflow in ComfyUI
 2. Upload an image using the LoadImage node
 3. Configure generation parameters (model version, resolution, format)
 4. Run the workflow
-5. The 3D model will be generated and downloaded automatically
+5. The 3D model will be generated, downloaded, and previewed automatically
 
 **Recommended Settings**:
 - Model: `hitem3dv1.5` (latest version)
 - Resolution: `1024` (good balance of quality/speed)
-- Format: `glb` (widely supported)
+- Format: `glb` (best for preview and widely supported)
 - Generation Type: `both` (geometry + texture)
 
-### 2. `hitem3d_multiview_workflow.json` - Multi-View to 3D
+### 3. `hitem3d_multiview_workflow.json` - Multi-View to 3D
 **Purpose**: Generate a high-quality 3D model from multiple view images.
 
 **Nodes Used**:
@@ -54,7 +80,7 @@ This directory contains example workflows demonstrating how to use the HiTem3D c
 - Higher resolution (1536) recommended for better quality
 - Increase face count (2,000,000) for more detail
 
-### 3. `hitem3d_config_workflow.json` - API Configuration
+### 4. `hitem3d_config_workflow.json` - API Configuration
 **Purpose**: Update your HiTem3D API credentials.
 
 **Nodes Used**:
@@ -122,6 +148,39 @@ If models don't download:
 - Check the output directory path
 - Ensure you have write permissions
 - Verify the model URL is valid
+
+## 🎮 HiTem3D 3D Preview Node
+
+The **HiTem3DPreviewNode** provides an interactive 3D viewer directly in ComfyUI!
+
+### Features:
+- **Interactive Controls**: Mouse to rotate, zoom, and pan
+- **Multiple View Modes**: Solid, wireframe, with/without grid
+- **Lighting**: Automatic lighting setup for optimal viewing
+- **Background Options**: Black, white, gray backgrounds
+- **Model Info**: Shows vertex and face counts
+- **Format Support**: GLB, GLTF, OBJ, STL formats
+
+### Controls:
+- **Mouse**: Left-click drag to rotate, scroll to zoom, right-click drag to pan
+- **Reset View**: Button to return to default camera position
+- **Wireframe**: Toggle between solid and wireframe display
+- **Auto Rotate**: Enable/disable automatic model rotation
+- **Grid**: Show/hide reference grid
+- **Background**: Quick background color changes
+
+### Usage Tips:
+- **GLB format recommended** for best preview experience
+- **512x512 preview size** is good balance of quality and performance
+- **Auto-rotate enabled** by default for better model visibility
+- **File path** is automatically filled from HiTem3DDownloaderNode output
+
+### Connection:
+```
+HiTem3DDownloaderNode (model_path) → HiTem3DPreviewNode (model_path)
+```
+
+The preview updates automatically when a new model is downloaded!
 
 ## Best Practices
 
