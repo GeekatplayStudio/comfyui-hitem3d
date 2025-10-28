@@ -25,14 +25,13 @@ Use this link to sign up and get credits for HiTem3D API usage!
 - **Auto-refresh Tokens** - Trigger HTML preview updates automatically
 
 ### 📊 Complete Node Collection
-- **7 specialized nodes** for 3D generation and HTML preview
-- **Professional 3D Preview** with interactive controls
-- **Flexible workflow examples** for all use cases
+- **8 specialized nodes** for 3D generation, HTML preview, and history tracking
 
 ## 📁 Examples & Workflows
 Check out the **`examples/`** folder for:
 - `hitem3d_basic_workflow.json` - Basic 3D generation workflow
 - `html_previewer_workflow.json` - HTML preview with auto-refresh
+- `basic_workflow_with_history.json` - Complete workflow with history tracking
 - Complete integration examples and documentation
 
 ## 🚀 Quick Start
@@ -171,6 +170,36 @@ Processes text templates with dynamic placeholders.
 - `{{year}}`, `{{month}}`, `{{day}}` - Date components
 - `{{hour}}`, `{{minute}}`, `{{second}}` - Time components
 - `{{value1}}`, `{{value2}}`, `{{value3}}` - Input values
+
+#### HiTem3D History
+Tracks and manages generated model history with organized download interface.
+
+**Inputs:**
+- `model_url`: Model download URL from HiTem3D Generator
+- `cover_url`: Cover image URL from HiTem3D Generator
+- `task_id`: Task ID for tracking (optional)
+- `model_name`: Custom name for the model (optional)
+- `max_history_items`: Maximum number of history entries to keep (10-200)
+
+**Outputs:**
+- `history_html`: Beautiful HTML interface showing model history
+- `history_status`: Status message with operation results
+
+**Features:**
+- 📚 **Organized History** - Chronological list of all generated models
+- 🎯 **Direct Downloads** - Clickable links for models and covers
+- 📊 **Smart Tracking** - Automatic timestamps and file format detection
+- 🌟 **Professional UI** - Modern scrollable interface with hover effects
+- 💾 **Persistent Storage** - History saved to JSON file between sessions
+- 🔍 **Model Details** - Shows format, task ID, generation date/time
+
+**History Display Features:**
+- **Alternating Rows** - Easy visual scanning
+- **Download Buttons** - Separate buttons for 3D model and cover image
+- **Format Badges** - GLB, OBJ, STL, FBX format indicators
+- **Timestamp Display** - Date and time of generation
+- **Scrollable Interface** - Handles large history collections
+- **Responsive Design** - Works on different screen sizes
 
 ## Installation
 

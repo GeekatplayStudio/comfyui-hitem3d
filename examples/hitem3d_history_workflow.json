@@ -1,0 +1,261 @@
+{
+  "id": "history-workflow-001",
+  "revision": 0,
+  "last_node_id": 4,
+  "last_link_id": 4,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "LoadImage",
+      "pos": [
+        100,
+        100
+      ],
+      "size": [
+        315,
+        314
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            1
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "example.png",
+        "image"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "HiTem3DConfigNode",
+      "pos": [
+        100,
+        450
+      ],
+      "size": [
+        320,
+        150
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "config_status",
+          "type": "STRING",
+          "links": [
+            2
+          ]
+        },
+        {
+          "name": "config_data",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HiTem3DConfigNode"
+      },
+      "widgets_values": [
+        "",
+        "",
+        false,
+        false
+      ]
+    },
+    {
+      "id": 3,
+      "type": "HiTem3DNode",
+      "pos": [
+        500,
+        100
+      ],
+      "size": [
+        400,
+        580
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "front_image",
+          "type": "IMAGE",
+          "link": 1
+        },
+        {
+          "name": "back_image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "left_image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "right_image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "config_data",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "config_data"
+          },
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "model_url",
+          "type": "STRING",
+          "links": [
+            3
+          ]
+        },
+        {
+          "name": "cover_url",
+          "type": "STRING",
+          "links": [
+            4
+          ]
+        },
+        {
+          "name": "task_id",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HiTem3DNode"
+      },
+      "widgets_values": [
+        "hitem3dv1.5",
+        512,
+        "obj",
+        "geometry_only",
+        1000000,
+        1800,
+        ""
+      ]
+    },
+    {
+      "id": 4,
+      "type": "HiTem3DHistoryNode",
+      "pos": [
+        950,
+        100
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model_url",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "model_url"
+          },
+          "link": 3
+        },
+        {
+          "name": "cover_url",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "cover_url"
+          },
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "history_display",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HiTem3DHistoryNode"
+      },
+      "widgets_values": [
+        "",
+        ""
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      3,
+      0,
+      "IMAGE"
+    ],
+    [
+      2,
+      2,
+      0,
+      3,
+      4,
+      "STRING"
+    ],
+    [
+      3,
+      3,
+      0,
+      4,
+      0,
+      "STRING"
+    ],
+    [
+      4,
+      3,
+      1,
+      4,
+      1,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1.0,
+      "offset": [
+        0,
+        0
+      ]
+    }
+  },
+  "version": 0.4
+}

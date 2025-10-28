@@ -5,13 +5,14 @@
 
 ## 🎯 Complete Node Collection
 
-This package includes **7 specialized nodes** for 3D generation and HTML preview:
+This package includes **8 specialized nodes** for 3D generation and HTML preview:
 
 ### 🔧 Core 3D Generation Nodes
 - **HiTem3D Generator** - Convert images to 3D models
 - **HiTem3D Downloader** - Download generated models
 - **HiTem3D Config** - Manage API credentials
 - **HiTem3D 3D Preview** - Interactive 3D model viewer
+- **HiTem3D History** - Track and manage generated models
 
 ### 🌐 HTML Preview System Nodes
 - **HTML Previewer (Local)** - Live HTML preview in ComfyUI

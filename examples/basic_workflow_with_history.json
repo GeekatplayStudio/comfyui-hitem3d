@@ -1,0 +1,384 @@
+{
+  "last_node_id": 8,
+  "last_link_id": 14,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "HiTem3DConfigNode",
+      "pos": [50, 50],
+      "size": [300, 140],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "config",
+          "type": "HITEM3D_CONFIG",
+          "links": [1],
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HiTem3DConfigNode"
+      },
+      "widgets_values": [
+        "ak_6d8580243bc54bd2a10c9fccfdb6541b",
+        "sk_e4c1f74e149e4d6c9a66c6792ef9744b"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "HiTem3DNode",
+      "pos": [400, 50],
+      "size": [350, 250],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "config",
+          "type": "HITEM3D_CONFIG",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "task_id",
+          "type": "STRING",
+          "links": [2, 8],
+          "shape": 3
+        },
+        {
+          "name": "status",
+          "type": "STRING",
+          "links": [3],
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HiTem3DNode"
+      },
+      "widgets_values": [
+        "a cute robot with blue eyes",
+        "medium",
+        "6090ce58b8ca4bf2aef5a6d0a5a3e1c4",
+        30,
+        5,
+        "none",
+        "none",
+        "",
+        true
+      ]
+    },
+    {
+      "id": 3,
+      "type": "HiTem3DDownloaderNode",
+      "pos": [800, 50],
+      "size": [350, 180],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "config",
+          "type": "HITEM3D_CONFIG",
+          "link": 1
+        },
+        {
+          "name": "task_id",
+          "type": "STRING",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "model_url",
+          "type": "STRING",
+          "links": [4, 9],
+          "shape": 3
+        },
+        {
+          "name": "cover_url",
+          "type": "STRING",
+          "links": [5, 10],
+          "shape": 3
+        },
+        {
+          "name": "download_status",
+          "type": "STRING",
+          "links": [6],
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HiTem3DDownloaderNode"
+      },
+      "widgets_values": [
+        "d:\\ComfyUI\\0.3.66\\ComfyUI\\temp\\hitem3d",
+        true,
+        false,
+        5,
+        10
+      ]
+    },
+    {
+      "id": 4,
+      "type": "HiTem3DPreviewNode",
+      "pos": [1200, 50],
+      "size": [350, 200],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model_url",
+          "type": "STRING",
+          "link": 4
+        },
+        {
+          "name": "cover_url",
+          "type": "STRING",
+          "link": 5
+        }
+      ],
+      "outputs": [
+        {
+          "name": "preview_html",
+          "type": "STRING",
+          "links": [7],
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HiTem3DPreviewNode"
+      },
+      "widgets_values": [
+        800,
+        600,
+        true
+      ]
+    },
+    {
+      "id": 5,
+      "type": "HTMLPreviewer",
+      "pos": [1600, 50],
+      "size": [300, 200],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "html_content",
+          "type": "STRING",
+          "link": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "preview_url",
+          "type": "STRING",
+          "links": [],
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HTMLPreviewer"
+      },
+      "widgets_values": [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": 6,
+      "type": "DynamicValueGenerator",
+      "pos": [50, 350],
+      "size": [300, 180],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "dynamic_value",
+          "type": "STRING",
+          "links": [11],
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "DynamicValueGenerator"
+      },
+      "widgets_values": [
+        "timestamp",
+        "gen_",
+        1,
+        "%Y%m%d_%H%M%S"
+      ]
+    },
+    {
+      "id": 7,
+      "type": "TextTemplate",
+      "pos": [400, 350],
+      "size": [350, 200],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value1",
+          "type": "STRING",
+          "link": 11
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text_output",
+          "type": "STRING",
+          "links": [12],
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "TextTemplate"
+      },
+      "widgets_values": [
+        "Generated Model: {{value1}}",
+        "",
+        "",
+        "",
+        "%Y-%m-%d %H:%M:%S"
+      ]
+    },
+    {
+      "id": 8,
+      "type": "HiTem3DHistoryNode",
+      "pos": [800, 300],
+      "size": [400, 250],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model_url",
+          "type": "STRING",
+          "link": 9
+        },
+        {
+          "name": "cover_url",
+          "type": "STRING",
+          "link": 10
+        },
+        {
+          "name": "task_id",
+          "type": "STRING",
+          "link": 8
+        },
+        {
+          "name": "model_name",
+          "type": "STRING",
+          "link": 12
+        }
+      ],
+      "outputs": [
+        {
+          "name": "history_html",
+          "type": "STRING",
+          "links": [13],
+          "shape": 3
+        },
+        {
+          "name": "history_status",
+          "type": "STRING",
+          "links": [14],
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HiTem3DHistoryNode"
+      },
+      "widgets_values": [
+        "",
+        "",
+        "",
+        "",
+        50
+      ]
+    },
+    {
+      "id": 9,
+      "type": "HTMLPreviewer",
+      "pos": [1250, 300],
+      "size": [300, 200],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "html_content",
+          "type": "STRING",
+          "link": 13
+        }
+      ],
+      "outputs": [
+        {
+          "name": "preview_url",
+          "type": "STRING",
+          "links": [],
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HTMLPreviewer"
+      },
+      "widgets_values": [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ]
+    }
+  ],
+  "links": [
+    [1, 1, 0, 2, 0, "HITEM3D_CONFIG"],
+    [2, 2, 0, 3, 1, "STRING"],
+    [3, 2, 1, 4, 2, "STRING"],
+    [4, 3, 0, 4, 0, "STRING"],
+    [5, 3, 1, 4, 1, "STRING"],
+    [6, 3, 2, 5, 3, "STRING"],
+    [7, 4, 0, 5, 4, "STRING"],
+    [8, 2, 0, 8, 2, "STRING"],
+    [9, 3, 0, 8, 0, "STRING"],
+    [10, 3, 1, 8, 1, "STRING"],
+    [11, 6, 0, 7, 0, "STRING"],
+    [12, 7, 0, 8, 3, "STRING"],
+    [13, 8, 0, 9, 4, "STRING"],
+    [14, 8, 1, 10, 0, "STRING"]
+  ],
+  "groups": [
+    {
+      "title": "Core Generation",
+      "bounding": [25, -25, 750, 350],
+      "color": "#3f51b5",
+      "font_size": 24
+    },
+    {
+      "title": "Preview & Display",
+      "bounding": [1175, -25, 750, 350],
+      "color": "#ff9800",
+      "font_size": 24
+    },
+    {
+      "title": "History & Templates",
+      "bounding": [25, 275, 1200, 350],
+      "color": "#4caf50",
+      "font_size": 24
+    }
+  ],
+  "config": {},
+  "extra": {},
+  "version": 0.4
+}

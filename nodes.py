@@ -2310,6 +2310,166 @@ class TextTemplate:
             return (template,)  # Return original template on error
 
 
+class HiTem3DHistoryNode:
+    """History Node - Tracks all generated models and textures with clickable download links"""
+    
+    @classmethod
+    def INPUT_TYPES(cls) -> Dict[str, Any]:
+        return {
+            "required": {},
+            "optional": {
+                "model_url": ("STRING", {"default": ""}),
+                "cover_url": ("STRING", {"default": ""}),
+                "task_id": ("STRING", {"default": ""}),
+                "model_name": ("STRING", {"default": ""}),
+            }
+        }
+
+    RETURN_TYPES = ("STRING", "STRING")
+    RETURN_NAMES = ("history_html", "history_status")
+    FUNCTION = "update_history"
+    CATEGORY = "HiTem3D"
+    OUTPUT_NODE = True
+
+    def __init__(self):
+        # Use node folder for history.json
+        self.history_file = CURRENT_DIR / "history.json"
+        
+    def update_history(self, model_url: str = "", cover_url: str = "", task_id: str = "", model_name: str = ""):
+        """Update history file and display all entries"""
+        
+        # Always load current history first
+        history = self._load_history()
+        
+        # If new URLs provided, append to history
+        if model_url and cover_url and "❌" not in model_url and "❌" not in cover_url:
+            # Add new entry at the beginning
+            new_entry = {
+                "date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "model_url": model_url,
+                "texture_url": cover_url,
+                "task_id": task_id,
+                "model_name": model_name
+            }
+            history.insert(0, new_entry)
+            
+            # Keep last 100 entries
+            history = history[:100]
+            
+            # Save updated history
+            self._save_history(history)
+            logger.info(f"History: Added new entry. Total entries: {len(history)}")
+        
+        # Generate HTML for output (always, even if no new entries)
+        history_html = self._generate_html_display(history)
+        
+        # Generate text display for node widget
+        history_text = self._generate_text_display(history)
+        
+        # Generate status message
+        status = f"✅ History loaded - {len(history)} entries"
+        if not history:
+            status = "📦 No history yet - generate models to populate history"
+        
+        # Return both outputs with UI display
+        return {"ui": {"text": [history_text]}, "result": (history_html, status)}
+    
+    def _generate_text_display(self, history: list) -> str:
+        """Generate simple text display for node widget"""
+        if not history:
+            return "📦 No history yet\n\nGenerate models to see history here."
+        
+        lines = [f"📚 Generation History ({len(history)} items)\n" + "="*50 + "\n"]
+        for i, entry in enumerate(history[:10], 1):  # Show only first 10 in node
+            date = entry.get('date', 'Unknown')
+            lines.append(f"#{i} - {date}")
+            lines.append(f"   Model: {entry.get('model_url', 'N/A')[:60]}...")
+            lines.append(f"   Texture: {entry.get('texture_url', 'N/A')[:60]}...")
+            lines.append("")
+        
+        if len(history) > 10:
+            lines.append(f"... and {len(history) - 10} more entries")
+            lines.append(f"Connect history_html output to view all in browser")
+        
+        return "\n".join(lines)
+    
+    def _load_history(self) -> list:
+        """Load history from JSON file"""
+        try:
+            if self.history_file.exists():
+                with open(self.history_file, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+        except Exception as e:
+            logger.warning(f"History: Could not load history.json: {e}")
+        return []
+    
+    def _save_history(self, history: list):
+        """Save history to JSON file"""
+        try:
+            with open(self.history_file, 'w', encoding='utf-8') as f:
+                json.dump(history, f, indent=2, ensure_ascii=False)
+        except Exception as e:
+            logger.error(f"History: Could not save history.json: {e}")
+    
+    def _generate_html_display(self, history: list) -> str:
+        """Generate HTML display for browser viewing"""
+        
+        if not history:
+            return "<html><body style='font-family:Arial;padding:20px;background:#2a2a2a;color:white;'><h2>📦 No history yet</h2><p>Generate models to see them here.</p></body></html>"
+        
+        # Build list
+        items = ""
+        for i, entry in enumerate(history, 1):
+            # Use correct keys with fallbacks for backward compatibility
+            date = entry.get('date', entry.get('time', 'Unknown'))
+            model_url = entry.get('model_url', entry.get('model', ''))
+            texture_url = entry.get('texture_url', entry.get('texture', ''))
+            task_id = entry.get('task_id', '')
+            model_name = entry.get('model_name', '')
+            
+            # Build info line
+            info_parts = [f"#{i} - {date}"]
+            if model_name:
+                info_parts.append(f"Name: {model_name}")
+            if task_id:
+                info_parts.append(f"Task: {task_id}")
+            info_line = " | ".join(info_parts)
+            
+            items += f"""
+            <div style='background:{"#333" if i%2==0 else "#2a2a2a"};padding:15px;margin:5px 0;border-radius:8px;'>
+                <div style='color:#4a9eff;font-weight:bold;margin-bottom:8px;'>{info_line}</div>
+                <a href='{model_url}' target='_blank' style='display:inline-block;background:#4CAF50;color:white;padding:8px 15px;margin:5px 5px 5px 0;border-radius:5px;text-decoration:none;'>⬇️ Download Model</a>
+                <a href='{texture_url}' target='_blank' style='display:inline-block;background:#2196F3;color:white;padding:8px 15px;margin:5px;border-radius:5px;text-decoration:none;'>�️ Download Texture</a>
+            </div>
+            """
+        
+        return f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>HiTem3D History</title>
+    <style>
+        body {{ font-family: Arial; background: #1a1a1a; color: white; margin: 0; padding: 20px; }}
+        .container {{ max-width: 900px; margin: 0 auto; }}
+        h1 {{ color: #4a9eff; border-bottom: 3px solid #4CAF50; padding-bottom: 10px; }}
+        .history {{ max-height: 600px; overflow-y: auto; margin-top: 20px; }}
+        .history::-webkit-scrollbar {{ width: 10px; }}
+        .history::-webkit-scrollbar-track {{ background: #2a2a2a; }}
+        .history::-webkit-scrollbar-thumb {{ background: #4a9eff; border-radius: 5px; }}
+        a:hover {{ opacity: 0.8; }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 HiTem3D Generation History ({len(history)} items)</h1>
+        <div class="history">{items}</div>
+    </div>
+</body>
+</html>
+        """
+
+
 # Node mappings for ComfyUI
 NODE_CLASS_MAPPINGS = {
     "HiTem3DNode": HiTem3DNode,
@@ -2319,14 +2479,16 @@ NODE_CLASS_MAPPINGS = {
     "HTMLPreviewer": HTMLPreviewer,
     "DynamicValueGenerator": DynamicValueGenerator,
     "TextTemplate": TextTemplate,
+    "HiTem3DHistoryNode": HiTem3DHistoryNode,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "HiTem3DNode": "HiTem3D Generator",
-    "HiTem3DDownloaderNode": "HiTem3D Downloader", 
-    "HiTem3DConfigNode": "HiTem3D Config",
-    "HiTem3DPreviewNode": "HiTem3D 3D Preview",
-    "HTMLPreviewer": "HTML Previewer (Local)",
-    "DynamicValueGenerator": "Dynamic Value Generator",
-    "TextTemplate": "Text Template",
+    "HiTem3DNode": "🎯 HiTem3D Generator",
+    "HiTem3DDownloaderNode": "⬇️ HiTem3D Downloader", 
+    "HiTem3DConfigNode": "⚙️ HiTem3D Config",
+    "HiTem3DPreviewNode": "👁️ HiTem3D 3D Preview",
+    "HTMLPreviewer": "🌐 HTML Previewer (Local)",
+    "DynamicValueGenerator": "🔄 Dynamic Value Generator",
+    "TextTemplate": "📝 Text Template",
+    "HiTem3DHistoryNode": "📚 HiTem3D History",
 }
