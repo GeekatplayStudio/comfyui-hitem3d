@@ -105,8 +105,8 @@ if HTML_PREVIEWER_AVAILABLE:
     def html_previewer_open(path: str = "", base: str = "", file: str = ""):
         """
         Serve a single HTML file:
-          - Either provide ?path=C:\...\file.html
-          - Or provide ?base=C:\...\folder&file=index.html
+          - Either provide ?path=C:\\...\\file.html
+          - Or provide ?base=C:\\...\\folder&file=index.html
         """
         raw = path or os.path.join(base, file) if base and file else ""
         if not raw:
@@ -196,7 +196,20 @@ class HiTem3DNode:
     def _load_client(self, use_runtime_config=False):
         """Load HiTem3D API client from config file or runtime config"""
         try:
-            # First try runtime config from ConfigNode
+            # Check if runtime config should override file config
+            if HiTem3DConfigNode.should_override_config():
+                runtime_config = HiTem3DConfigNode.get_runtime_config()
+                if runtime_config and runtime_config.get("access_key") and runtime_config.get("secret_key"):
+                    from hitem3d_comfyui.client import HiTem3DClient
+                    self.client = HiTem3DClient(
+                        access_key=runtime_config["access_key"],
+                        secret_key=runtime_config["secret_key"],
+                        api_base_url=runtime_config.get("api_base_url", "https://api.hitem3d.ai")
+                    )
+                    logger.info("HiTem3D client loaded from runtime configuration (override enabled)")
+                    return
+            
+            # First try runtime config from ConfigNode (if not overriding)
             if use_runtime_config:
                 runtime_config = HiTem3DConfigNode.get_runtime_config()
                 if runtime_config and runtime_config.get("access_key") and runtime_config.get("secret_key"):
@@ -209,7 +222,7 @@ class HiTem3DNode:
                     logger.info("HiTem3D client loaded from runtime configuration")
                     return
             
-            # Fallback to file config (only if it has valid keys)
+            # Fallback to file config (only if it has valid keys and override is not enabled)
             if CONFIG_PATH.exists():
                 # Check if config file has valid keys before using it
                 import json
@@ -386,7 +399,20 @@ class HiTem3DDownloaderNode:
     def _load_client(self, use_runtime_config=False):
         """Load HiTem3D API client from config file or runtime config"""
         try:
-            # First try runtime config from ConfigNode
+            # Check if runtime config should override file config
+            if HiTem3DConfigNode.should_override_config():
+                runtime_config = HiTem3DConfigNode.get_runtime_config()
+                if runtime_config:
+                    from hitem3d_comfyui.client import HiTem3DClient
+                    self.client = HiTem3DClient(
+                        access_key=runtime_config["access_key"],
+                        secret_key=runtime_config["secret_key"],
+                        api_base_url=runtime_config["api_base_url"]
+                    )
+                    logger.info("HiTem3D client loaded from runtime configuration (override enabled)")
+                    return
+            
+            # First try runtime config from ConfigNode (if not overriding)
             if use_runtime_config:
                 runtime_config = HiTem3DConfigNode.get_runtime_config()
                 if runtime_config:
@@ -584,6 +610,7 @@ class HiTem3DConfigNode:
             "optional": {
                 "api_base_url": ("STRING", {"default": "https://api.hitem3d.ai"}),
                 "save_config": ("BOOLEAN", {"default": False}),
+                "override_config": ("BOOLEAN", {"default": False}),
             }
         }
     
@@ -597,7 +624,8 @@ class HiTem3DConfigNode:
                      access_key: str,
                      secret_key: str,
                      api_base_url: str = "https://api.hitem3d.ai",
-                     save_config: bool = False) -> Tuple[str, str]:
+                     save_config: bool = False,
+                     override_config: bool = False) -> Tuple[str, str]:
         """
         Update HiTem3D API configuration
         
@@ -623,6 +651,7 @@ class HiTem3DConfigNode:
             
             # Store runtime config for other nodes to use
             HiTem3DConfigNode._runtime_config = config["hitem3d"]
+            HiTem3DConfigNode._runtime_config["override_config"] = override_config
             
             if save_config:
                 with open(CONFIG_PATH, 'w', encoding='utf-8') as f:
@@ -643,6 +672,11 @@ class HiTem3DConfigNode:
     def get_runtime_config(cls):
         """Get current runtime configuration"""
         return cls._runtime_config
+    
+    @classmethod
+    def should_override_config(cls):
+        """Check if runtime config should override file config"""
+        return cls._runtime_config and cls._runtime_config.get("override_config", False)
 
 
 class HiTem3DPreviewNode:
@@ -2322,6 +2356,7 @@ class HiTem3DHistoryNode:
                 "cover_url": ("STRING", {"default": ""}),
                 "task_id": ("STRING", {"default": ""}),
                 "model_name": ("STRING", {"default": ""}),
+                "load_history": ("BOOLEAN", {"default": False}),
             }
         }
 
@@ -2335,7 +2370,7 @@ class HiTem3DHistoryNode:
         # Use node folder for history.json
         self.history_file = CURRENT_DIR / "history.json"
         
-    def update_history(self, model_url: str = "", cover_url: str = "", task_id: str = "", model_name: str = ""):
+    def update_history(self, model_url: str = "", cover_url: str = "", task_id: str = "", model_name: str = "", load_history: bool = False):
         """Update history file and display all entries"""
         
         # Always load current history first
@@ -2360,18 +2395,33 @@ class HiTem3DHistoryNode:
             self._save_history(history)
             logger.info(f"History: Added new entry. Total entries: {len(history)}")
         
-        # Generate HTML for output (always, even if no new entries)
-        history_html = self._generate_html_display(history)
+        # If load_history is True or we have history entries, generate HTML display
+        # This ensures history is always displayed when requested, even without new entries
+        if load_history or history or (model_url and cover_url):
+            history_html = self._generate_html_display(history)
+            
+            # Generate text display for node widget
+            history_text = self._generate_text_display(history)
+            
+            # Generate status message
+            if load_history:
+                status = f"✅ History loaded manually - {len(history)} entries"
+            elif model_url and cover_url:
+                status = f"✅ History updated - {len(history)} entries"
+            else:
+                status = f"✅ History loaded - {len(history)} entries"
+                
+            if not history:
+                status = "📦 No history yet - generate models to populate history"
+            
+            # Return both outputs with UI display
+            return {"ui": {"text": [history_text]}, "result": (history_html, status)}
         
-        # Generate text display for node widget
-        history_text = self._generate_text_display(history)
+        # If no load_history flag and no new entries, return empty but indicate how to load
+        history_html = self._generate_html_display([])
+        history_text = "📦 History not loaded\n\nSet 'load_history' to True to display existing history,\nor provide model URLs to add new entries."
+        status = "ℹ️ Set load_history=True to display history"
         
-        # Generate status message
-        status = f"✅ History loaded - {len(history)} entries"
-        if not history:
-            status = "📦 No history yet - generate models to populate history"
-        
-        # Return both outputs with UI display
         return {"ui": {"text": [history_text]}, "result": (history_html, status)}
     
     def _generate_text_display(self, history: list) -> str:

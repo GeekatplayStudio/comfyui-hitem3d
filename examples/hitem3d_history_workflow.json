@@ -1,8 +1,8 @@
 {
-  "id": "history-workflow-001",
-  "revision": 0,
-  "last_node_id": 4,
-  "last_link_id": 4,
+  "id": "comprehensive-hitem3d-workflow-001",
+  "revision": 1,
+  "last_node_id": 10,
+  "last_link_id": 16,
   "nodes": [
     {
       "id": 1,
@@ -46,7 +46,7 @@
       "type": "HiTem3DConfigNode",
       "pos": [
         100,
-        450
+        500
       ],
       "size": [
         320,
@@ -74,8 +74,9 @@
         "Node name for S&R": "HiTem3DConfigNode"
       },
       "widgets_values": [
-        "",
-        "",
+        "ak_de670805008b4bb997f9cd8086072a7a",
+        "sk_671eeae344d84bd49882aa945726e826",
+        "https://api.hitem3d.ai",
         false,
         false
       ]
@@ -133,20 +134,24 @@
           "name": "model_url",
           "type": "STRING",
           "links": [
-            3
+            3,
+            4
           ]
         },
         {
           "name": "cover_url",
           "type": "STRING",
           "links": [
-            4
+            5,
+            6
           ]
         },
         {
           "name": "task_id",
           "type": "STRING",
-          "links": null
+          "links": [
+            7
+          ]
         }
       ],
       "properties": {
@@ -164,14 +169,14 @@
     },
     {
       "id": 4,
-      "type": "HiTem3DHistoryNode",
+      "type": "HiTem3DDownloaderNode",
       "pos": [
         950,
         100
       ],
       "size": [
         400,
-        200
+        300
       ],
       "flags": {},
       "order": 3,
@@ -179,26 +184,246 @@
       "inputs": [
         {
           "name": "model_url",
-          "shape": 7,
           "type": "STRING",
-          "widget": {
-            "name": "model_url"
-          },
           "link": 3
-        },
-        {
-          "name": "cover_url",
-          "shape": 7,
-          "type": "STRING",
-          "widget": {
-            "name": "cover_url"
-          },
-          "link": 4
         }
       ],
       "outputs": [
         {
-          "name": "history_display",
+          "name": "model_path",
+          "type": "STRING",
+          "links": [
+            8
+          ]
+        },
+        {
+          "name": "status",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HiTem3DDownloaderNode"
+      },
+      "widgets_values": [
+        "hitem3d_model",
+        "hitem3d",
+        true,
+        50
+      ]
+    },
+    {
+      "id": 5,
+      "type": "HiTem3DPreviewNode",
+      "pos": [
+        1400,
+        100
+      ],
+      "size": [
+        400,
+        400
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model_path",
+          "type": "STRING",
+          "link": 8
+        }
+      ],
+      "outputs": [
+        {
+          "name": "preview_html",
+          "type": "STRING",
+          "links": [
+            9
+          ]
+        },
+        {
+          "name": "preview_file_path",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "preview_url",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HiTem3DPreviewNode"
+      },
+      "widgets_values": [
+        "",
+        512,
+        512,
+        "#808080",
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "id": 6,
+      "type": "DynamicValueGenerator",
+      "pos": [
+        1900,
+        100
+      ],
+      "size": [
+        320,
+        200
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "dynamic_value",
+          "type": "STRING",
+          "links": [
+            10
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "DynamicValueGenerator"
+      },
+      "widgets_values": [
+        "timestamp",
+        "preview_",
+        1,
+        "%Y%m%d_%H%M%S"
+      ]
+    },
+    {
+      "id": 7,
+      "type": "HTMLPreviewer",
+      "pos": [
+        1900,
+        350
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "html_content",
+          "type": "STRING",
+          "link": 9
+        },
+        {
+          "name": "auto_refresh_token",
+          "type": "STRING",
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "preview_url",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HTMLPreviewer"
+      },
+      "widgets_values": [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": 8,
+      "type": "TextTemplate",
+      "pos": [
+        2400,
+        100
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "text_output",
+          "type": "STRING",
+          "links": [
+            11
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "TextTemplate"
+      },
+      "widgets_values": [
+        "Model generated on {{timestamp}} using HiTem3D API\nTask ID: {{value1}}\nModel URL: {{value2}}\nTexture URL: {{value3}}",
+        "",
+        "",
+        "",
+        "%Y-%m-%d %H:%M:%S"
+      ]
+    },
+    {
+      "id": 9,
+      "type": "HiTem3DHistoryNode",
+      "pos": [
+        950,
+        500
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model_url",
+          "type": "STRING",
+          "link": 4
+        },
+        {
+          "name": "cover_url",
+          "type": "STRING",
+          "link": 6
+        },
+        {
+          "name": "task_id",
+          "type": "STRING",
+          "link": 7
+        },
+        {
+          "name": "model_name",
+          "type": "STRING",
+          "link": 11
+        }
+      ],
+      "outputs": [
+        {
+          "name": "history_html",
+          "type": "STRING",
+          "links": [
+            13
+          ]
+        },
+        {
+          "name": "history_status",
           "type": "STRING",
           "links": null
         }
@@ -207,6 +432,48 @@
         "Node name for S&R": "HiTem3DHistoryNode"
       },
       "widgets_values": [
+        "",
+        "",
+        "",
+        "",
+        false
+      ]
+    },
+    {
+      "id": 10,
+      "type": "HTMLPreviewer",
+      "pos": [
+        2400,
+        500
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "html_content",
+          "type": "STRING",
+          "link": 13
+        }
+      ],
+      "outputs": [
+        {
+          "name": "preview_url",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HTMLPreviewer"
+      },
+      "widgets_values": [
+        "",
+        "",
+        "",
         "",
         ""
       ]
@@ -240,9 +507,73 @@
     [
       4,
       3,
+      0,
+      9,
+      0,
+      "STRING"
+    ],
+    [
+      5,
+      3,
       1,
+      9,
+      1,
+      "STRING"
+    ],
+    [
+      6,
+      3,
+      1,
+      8,
+      2,
+      "STRING"
+    ],
+    [
+      7,
+      3,
+      2,
+      9,
+      2,
+      "STRING"
+    ],
+    [
+      8,
       4,
-      1,
+      0,
+      5,
+      0,
+      "STRING"
+    ],
+    [
+      9,
+      5,
+      0,
+      7,
+      4,
+      "STRING"
+    ],
+    [
+      10,
+      6,
+      0,
+      7,
+      3,
+      "STRING"
+    ],
+    [
+      11,
+      8,
+      0,
+      9,
+      3,
+      "STRING"
+    ],
+    [
+      12,
+      9,
+      0,
+      10,
+      4,
       "STRING"
     ]
   ],
