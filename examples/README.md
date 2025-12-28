@@ -64,10 +64,10 @@ Sample HTML file for testing the HTML preview system with:
 ### Core Nodes Required
 
 #### HiTem3D Generator Node
-- **Model**: `hitem3dv1.5` (recommended)
+- **Model**: `hitem3dv2.0` (new) or `hitem3dv1.5` (recommended)
 - **Resolution**: `1024` (balanced quality/speed)
 - **Format**: `glb` (best compatibility)
-- **Generation Type**: `both` (geometry + textures)
+- **Generation Type**: `all_in_one` (geometry + textures)
 
 #### HTML Previewer (Local)
 - **HTML Content**: Connect from 3D Preview or Text Template

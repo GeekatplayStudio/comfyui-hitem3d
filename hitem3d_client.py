@@ -96,7 +96,7 @@ class HiTem3DAPIClient:
             back_image: Optional back view image bytes
             left_image: Optional left side image bytes  
             right_image: Optional right side image bytes
-            model: Model version (hitem3dv1, hitem3dv1.5, scene-portraitv1.5)
+            model: Model version (hitem3dv1, hitem3dv1.5, hitem3dv2.0, scene-portraitv1.5)
             resolution: Output resolution (512, 1024, 1536, 1536pro)
             face_count: Number of faces (100000-2000000)
             output_format: Output format (1=obj, 2=glb, 3=stl, 4=fbx)

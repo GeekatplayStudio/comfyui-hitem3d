@@ -67,10 +67,10 @@ Converts images to 3D models using HiTem3D API.
 
 **Optional Inputs:**
 - `back_image`, `left_image`, `right_image`: Additional view images
-- `model`: Model version (`hitem3dv1`, `hitem3dv1.5`, `scene-portraitv1.5`)
+- `model`: Model version (`hitem3dv1`, `hitem3dv1.5`, `hitem3dv2.0`, `scene-portraitv1.5`)
 - `resolution`: Output resolution (`512`, `1024`, `1536`, `1536pro`)
 - `output_format`: File format (`obj`, `glb`, `stl`, `fbx`)
-- `generation_type`: Generation type (`geometry_only`, `texture_only`, `both`)
+- `generation_type`: Generation type (`geometry_only`, `staged`, `all_in_one`)
 - `face_count`: Number of faces (100,000 - 2,000,000)
 - `timeout`: Maximum wait time in seconds
 

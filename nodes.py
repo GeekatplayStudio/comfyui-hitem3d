@@ -174,10 +174,10 @@ class HiTem3DNode:
                 "back_image": ("IMAGE",),
                 "left_image": ("IMAGE",),
                 "right_image": ("IMAGE",),
-                "model": (["hitem3dv1", "hitem3dv1.5", "scene-portraitv1.5"], {"default": "hitem3dv1.5"}),
+                "model": (["hitem3dv1", "hitem3dv1.5", "hitem3dv2.0", "scene-portraitv1.5"], {"default": "hitem3dv1.5"}),
                 "resolution": ([512, 1024, 1536, "1536pro"], {"default": 1024}),
                 "output_format": (["obj", "glb", "stl", "fbx"], {"default": "glb"}),
-                "generation_type": (["geometry_only", "texture_only", "both"], {"default": "both"}),
+                "generation_type": (["geometry_only", "staged", "all_in_one"], {"default": "all_in_one"}),
                 "face_count": ("INT", {"default": 1000000, "min": 100000, "max": 2000000, "step": 10000}),
                 "timeout": ("INT", {"default": 900, "min": 300, "max": 7200, "step": 300}),
                 "config_data": ("STRING", {"default": ""}),
@@ -250,7 +250,7 @@ class HiTem3DNode:
     
     def _generation_type_to_int(self, gen_type: str) -> int:
         """Convert generation type string to API integer"""
-        type_map = {"geometry_only": 1, "texture_only": 2, "both": 3}
+        type_map = {"geometry_only": 1, "staged": 2, "all_in_one": 3, "texture_only": 2, "both": 3}
         return type_map.get(gen_type, 3)
     
     def _resolution_to_int(self, resolution) -> int:

@@ -71,10 +71,17 @@ def get_advanced_settings():
     
     # Default model
     print("📦 Available models:")
-    print("   1. hitem3dv1.5 (recommended)")
-    print("   2. hitem3dv1.0")
-    model_choice = input("Choose model (1-2, default=1): ").strip()
-    model = "hitem3dv1.5" if model_choice != "2" else "hitem3dv1.0"
+    print("   1. hitem3dv2.0 (new)")
+    print("   2. hitem3dv1.5 (recommended)")
+    print("   3. hitem3dv1.0")
+    model_choice = input("Choose model (1-3, default=2): ").strip()
+    
+    if model_choice == "1":
+        model = "hitem3dv2.0"
+    elif model_choice == "3":
+        model = "hitem3dv1.0"
+    else:
+        model = "hitem3dv1.5"
     
     # Default resolution
     print("\n📐 Default resolution:")
