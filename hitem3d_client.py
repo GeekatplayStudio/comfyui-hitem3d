@@ -83,9 +83,9 @@ class HiTem3DAPIClient:
                    left_image: Optional[bytes] = None,
                    right_image: Optional[bytes] = None,
                    model: str = "hitem3dv1.5",
-                   resolution: int = 1024,
+                   resolution: Union[int, str] = 1024,
                    face_count: int = 1000000,
-                   output_format: int = 2,  # 1=obj, 2=glb, 3=stl, 4=fbx
+                   output_format: int = 2,  # 1=obj, 2=glb, 3=stl, 4=fbx, 5=usdz
                    request_type: int = 3,   # 1=geometry, 2=texture, 3=both
                    callback_url: Optional[str] = None) -> str:
         """
@@ -99,7 +99,7 @@ class HiTem3DAPIClient:
             model: Model version (hitem3dv1, hitem3dv1.5, hitem3dv2.0, scene-portraitv1.5)
             resolution: Output resolution (512, 1024, 1536, 1536pro)
             face_count: Number of faces (100000-2000000)
-            output_format: Output format (1=obj, 2=glb, 3=stl, 4=fbx)
+            output_format: Output format (1=obj, 2=glb, 3=stl, 4=fbx, 5=usdz)
             request_type: Generation type (1=geometry, 2=texture, 3=both)
             callback_url: Optional callback URL
             

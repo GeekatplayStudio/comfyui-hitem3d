@@ -22,7 +22,7 @@ import random
 import datetime
 import re
 from pathlib import Path
-from typing import Dict, Any, Optional, Tuple, List
+from typing import Dict, Any, Optional, Tuple, List, Union
 
 # ComfyUI imports
 import folder_paths
@@ -176,7 +176,7 @@ class HiTem3DNode:
                 "right_image": ("IMAGE",),
                 "model": (["hitem3dv1", "hitem3dv1.5", "hitem3dv2.0", "scene-portraitv1.5"], {"default": "hitem3dv1.5"}),
                 "resolution": ([512, 1024, 1536, "1536pro"], {"default": 1024}),
-                "output_format": (["obj", "glb", "stl", "fbx"], {"default": "glb"}),
+                "output_format": (["obj", "glb", "stl", "fbx", "usdz"], {"default": "glb"}),
                 "generation_type": (["geometry_only", "staged", "all_in_one"], {"default": "all_in_one"}),
                 "face_count": ("INT", {"default": 1000000, "min": 100000, "max": 2000000, "step": 10000}),
                 "timeout": ("INT", {"default": 900, "min": 300, "max": 7200, "step": 300}),
@@ -245,7 +245,7 @@ class HiTem3DNode:
 
     def _format_to_int(self, format_str: str) -> int:
         """Convert format string to API integer"""
-        format_map = {"obj": 1, "glb": 2, "stl": 3, "fbx": 4}
+        format_map = {"obj": 1, "glb": 2, "stl": 3, "fbx": 4, "usdz": 5}
         return format_map.get(format_str, 2)
     
     def _generation_type_to_int(self, gen_type: str) -> int:
@@ -253,10 +253,10 @@ class HiTem3DNode:
         type_map = {"geometry_only": 1, "staged": 2, "all_in_one": 3, "texture_only": 2, "both": 3}
         return type_map.get(gen_type, 3)
     
-    def _resolution_to_int(self, resolution) -> int:
-        """Convert resolution to integer"""
+    def _resolution_to_int(self, resolution) -> Union[int, str]:
+        """Convert resolution to API value"""
         if isinstance(resolution, str) and resolution == "1536pro":
-            return 1536  # API uses 1536 for pro, differentiated by other params
+            return resolution
         return int(resolution)
     
     def generate_3d_model(self, 

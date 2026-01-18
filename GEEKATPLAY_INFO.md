@@ -24,7 +24,7 @@ This ComfyUI custom node integrates the powerful HiTem3D API for generating high
 
 - **Single Image to 3D**: Generate 3D models from a single front-view image
 - **Multi-View to 3D**: Use multiple angles (front, back, left, right) for higher quality
-- **Multiple Formats**: Export as GLB, OBJ, STL, or FBX
+- **Multiple Formats**: Export as GLB, OBJ, STL, FBX, or USDZ
 - **Various Resolutions**: From 512³ to 1536³ Pro quality
 - **Flexible Generation**: Geometry-only, texture-only, or complete models
 

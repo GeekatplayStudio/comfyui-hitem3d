@@ -13,7 +13,12 @@ Use this link to sign up and get credits for HiTem3D API usage!
 
 ## 🎯 New Features
 
-### 🌐 HTML Previewer System
+### � Latest Updates
+- **New Resolutions**: Support for 1536 and 1536pro (Pro Quality)
+- **New Format**: Support for USDZ output format
+- **New Models**: Support for hitem3dv2.0 and scene-portraitv1.5
+
+### �🌐 HTML Previewer System
 - **Live HTML Preview** in ComfyUI with floating panel interface
 - **Auto-refresh functionality** with dynamic tokens
 - **Secure file serving** with path validation
